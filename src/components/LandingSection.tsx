@@ -67,9 +67,24 @@ export default function LandingSection() {
   const sloganTextPart2 = "move your soul!";
 
 
-  // Simplified approach without individual letter transforms to avoid React hooks issues
-  const globalOpacity = useTransform(scrollYProgress, [0.1, 0.8], [1, 0]);
-  const globalY = useTransform(scrollYProgress, [0.1, 0.8], [0, -200]);
+  // Individual letter animations for chaotic disappearing effect
+  const sloganPart1Letters = sloganTextPart1.split('');
+  const sloganPart2Letters = sloganTextPart2.split('');
+  
+  // Create individual transforms for each letter with different scroll ranges for chaos
+  const createLetterTransforms = (letterIndex: number, totalLetters: number) => {
+    const randomStart = 0.1 + (letterIndex / totalLetters) * 0.2;
+    const randomEnd = 0.6 + (letterIndex / totalLetters) * 0.3;
+    const randomYOffset = -50 - (letterIndex * 15) - (Math.sin(letterIndex) * 30);
+    const randomRotation = (letterIndex % 2 === 0 ? 1 : -1) * (10 + letterIndex * 5);
+    
+    return {
+      opacity: useTransform(scrollYProgress, [randomStart, randomEnd], [1, 0]),
+      y: useTransform(scrollYProgress, [randomStart, randomEnd], [0, randomYOffset]),
+      rotate: useTransform(scrollYProgress, [randomStart, randomEnd], [0, randomRotation]),
+      scale: useTransform(scrollYProgress, [randomStart, randomEnd], [1, 0.3])
+    };
+  };
 
   return (
     <>
@@ -219,15 +234,24 @@ export default function LandingSection() {
               animate={isVisible ? "visible" : "hidden"}
               className="block text-gray-300"
             >
-              <motion.span
-                style={{
-                  display: 'block',
-                  opacity: globalOpacity,
-                  y: globalY,
-                }}
-              >
-                {sloganTextPart1}
-              </motion.span>
+              {sloganPart1Letters.map((char, index) => {
+                const transforms = createLetterTransforms(index, sloganPart1Letters.length);
+                return (
+                  <motion.span
+                    key={index}
+                    style={{
+                      display: 'inline-block',
+                      opacity: transforms.opacity,
+                      y: transforms.y,
+                      rotate: transforms.rotate,
+                      scale: transforms.scale,
+                      marginRight: char === ' ' ? '0.3em' : '0',
+                    }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                );
+              })}
             </motion.div>
 
             <motion.div
@@ -237,15 +261,24 @@ export default function LandingSection() {
               animate={isVisible ? "visible" : "hidden"}
               className="block text-white font-medium"
             >
-              <motion.span
-                style={{
-                  display: 'block',
-                  opacity: globalOpacity,
-                  y: globalY,
-                }}
-              >
-                {sloganTextPart2}
-              </motion.span>
+              {sloganPart2Letters.map((char, index) => {
+                const transforms = createLetterTransforms(index + sloganPart1Letters.length, sloganPart1Letters.length + sloganPart2Letters.length);
+                return (
+                  <motion.span
+                    key={index}
+                    style={{
+                      display: 'inline-block',
+                      opacity: transforms.opacity,
+                      y: transforms.y,
+                      rotate: transforms.rotate,
+                      scale: transforms.scale,
+                      marginRight: char === ' ' ? '0.3em' : '0',
+                    }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                );
+              })}
             </motion.div>
           </div>
         </div>
