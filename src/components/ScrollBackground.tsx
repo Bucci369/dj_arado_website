@@ -11,18 +11,23 @@ export default function ScrollBackground() {
     setMounted(true)
   }, [])
 
-  // Define color transitions based on scroll progress
+  // Smooth color transitions matching section backgrounds
   const backgroundColor = useTransform(
     scrollYProgress,
-    [0, 0.15, 0.35, 0.5, 0.65, 0.8, 1],
+    [0, 0.08, 0.12, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1],
     [
-      'linear-gradient(180deg, #050508 0%, #0a0a10 100%)', // Landing - very dark
-      'linear-gradient(180deg, #0a0a10 0%, #182030 100%)', // Bio start - dark blue
-      'linear-gradient(180deg, #182030 0%, #606070 100%)', // Bio end - medium
-      'linear-gradient(180deg, #d0d0d0 0%, #ffffff 100%)', // Music/Stats - white
-      '#ffffff', // Labels/Clubs - pure white
-      'linear-gradient(180deg, #ffffff 0%, #2a2a2a 100%)', // Gallery start - back to dark
-      'linear-gradient(180deg, #1a1a1a 0%, #000000 100%)'  // Video/Contact/Footer - dark
+      '#050508', // Landing start (matches original gradient start)
+      '#0f1419', // Landing end (matches original gradient end)
+      '#0f1419', // Bio start (seamless transition)
+      '#1a2832', // Bio end
+      '#ffffff', // Music (white section)
+      '#3a5668', // Stats
+      '#1a2832', // Labels
+      '#050508', // Clubs
+      '#0f1419', // Gallery
+      '#3a5668', // Video
+      '#1a2832', // Contact
+      '#050508'  // Contact end
     ]
   )
 

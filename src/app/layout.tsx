@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Poppins, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import GSAPInitializer from '@/components/GSAPInitializer'
 
-const inter = Inter({ 
+const poppins = Poppins({ 
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-poppins',
 })
 
 const jetbrainsMono = JetBrains_Mono({
@@ -24,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="de" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="de" className={`${poppins.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans">
         <GSAPInitializer />
         {children}

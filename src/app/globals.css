@@ -6,14 +6,13 @@
 }
 
 html {
-  scroll-behavior: smooth;
   font-size: 16px;
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #000000 !important; /* Komplett schwarz */
   color: #ffffff !important; /* Alle Texte weiß */
   overflow-x: hidden;
@@ -28,14 +27,68 @@ body {
   font-size: 4rem !important; /* 64px */
   line-height: 0.9 !important;
   font-weight: 700 !important; /* Reduziert von 900 auf 700 */
-  font-family: var(--font-inter), 'Inter', sans-serif !important;
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
   letter-spacing: 0.08em !important; /* Etwas mehr Abstand */
   text-transform: uppercase !important;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.1) !important; /* Weicher Glow */
 }
 
+/* ===== BIO IMAGE 3D EFFECTS ===== */
+.bio-image-wrapper {
+  perspective: 800px !important;
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  will-change: transform;
+}
+
+@media (min-width: 768px) {
+  .bio-image-wrapper {
+    margin: 0;
+  }
+}
+
+.bio-image {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: translateY(50px) rotateX(10deg) scale(0.95);
+  will-change: transform, opacity;
+}
+
+.bio-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.05) 0%, transparent 35%, transparent 65%, rgba(255, 71, 87, 0.05) 100%);
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+  will-change: opacity;
+}
+
+.bio-image:hover .image-overlay {
+  opacity: 0.8;
+}
+
+.bio-image:hover img {
+  transform: scale(1.03);
+}
+
 .hero-slogan {
-  font-size: 1.25rem !important; /* 20px */
+  font-size: 1.75rem !important; /* 28px */
   line-height: 1.3 !important;
   font-weight: 400 !important;
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace !important;
@@ -48,7 +101,7 @@ body {
     font-size: 6rem !important; /* 96px */
   }
   .hero-slogan {
-    font-size: 1.5rem !important; /* 24px */
+    font-size: 2rem !important; /* 32px */
   }
 }
 
@@ -57,7 +110,7 @@ body {
     font-size: 8rem !important; /* 128px */
   }
   .hero-slogan {
-    font-size: 1.75rem !important; /* 28px */
+    font-size: 2.25rem !important; /* 36px */
   }
 }
 
@@ -66,23 +119,40 @@ body {
     font-size: 10rem !important; /* 160px */
   }
   .hero-slogan {
-    font-size: 2rem !important; /* 32px */
+    font-size: 2.5rem !important; /* 40px */
   }
 }
 
 /* ===== PAGE SECTIONS ===== */
 .page-section {
-  min-height: 100vh;
-  padding: 5rem 2rem;
+  min-height: 110vh; /* Slightly increased for more space but not too much */
+  padding: 3rem 2rem; /* Moderate padding for spacing */
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   position: relative;
-  scroll-snap-align: start;
   overflow: hidden;
   background-color: transparent;
+  border: none;
+}
+
+/* Special override for hero section to keep it full screen */
+#hero.page-section {
+  min-height: 100vh !important;
+  padding: 0 2rem !important;
+  margin: 0 !important;
+  border: none !important;
+  display: flex !important;
+}
+
+/* Bio section adjustment - remove all spacing */
+#about-me.page-section {
+  margin: 0 !important;
+  padding-top: 0 !important;
+  border: none !important;
 }
 
 /* ===== HERO BACKGROUND EDGE WAVES ===== */
@@ -182,11 +252,11 @@ body {
 }
 
 .title-underline { 
-  width: 60px; 
+  width: 50%; 
   height: 3px; 
   background: linear-gradient(90deg, #ff4757, #40e0d0) !important; /* About Me Farben für alle */
   margin: 0; 
-  margin-left: -10px; /* Ragt über den ersten Buchstaben heraus */
+  margin-left: 0; /* Startet beim ersten Buchstaben links */
   opacity: 0; 
   transform: scaleX(0); 
   transform-origin: left; /* Animation startet von links */
@@ -475,8 +545,8 @@ body {
   color: #ffffff !important;
 }
 
-/* Abstract Background Animations */
-.music-bg-animations {
+/* Professional Sound Wave Background */
+.music-bg-subtle {
   position: absolute;
   top: 0;
   left: 0;
@@ -484,270 +554,46 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 1;
+  overflow: hidden;
 }
 
-.floating-orb {
+.sound-wave {
   position: absolute;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-  animation: floatOrb 15s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: soundWave 8s ease-in-out infinite;
 }
 
-.orb-1 {
-  width: 80px;
-  height: 80px;
-  top: 10%;
-  left: 5%;
-  animation-delay: 0s;
-}
-
-.orb-2 {
-  width: 120px;
-  height: 120px;
-  top: 60%;
-  right: 8%;
-  animation-delay: -5s;
-}
-
-.orb-3 {
-  width: 60px;
-  height: 60px;
-  bottom: 15%;
-  left: 15%;
-  animation-delay: -10s;
-}
-
-.orb-4 {
-  width: 90px;
-  height: 90px;
-  top: 80%;
-  right: 5%;
-  animation-delay: -7s;
-  background: linear-gradient(135deg, rgba(255, 71, 87, 0.15), rgba(64, 224, 208, 0.08));
-  box-shadow: 0 0 30px rgba(255, 71, 87, 0.2);
-}
-
-.orb-5 {
-  width: 70px;
-  height: 70px;
-  top: 30%;
-  left: 60%;
-  animation-delay: -12s;
-  background: linear-gradient(135deg, rgba(64, 224, 208, 0.12), rgba(255, 71, 87, 0.06));
-  box-shadow: 0 0 25px rgba(64, 224, 208, 0.2);
-}
-
-.orb-6 {
-  width: 100px;
-  height: 100px;
-  bottom: 40%;
-  right: 25%;
-  animation-delay: -3s;
-  background: linear-gradient(135deg, rgba(255, 71, 87, 0.08), rgba(64, 224, 208, 0.15));
-  box-shadow: 0 0 35px rgba(64, 224, 208, 0.2);
-}
-
-.floating-line {
-  position: absolute;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: floatLine 20s linear infinite;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-.line-1 {
-  width: 200px;
-  height: 1px;
+.wave-1 {
   top: 20%;
-  right: 10%;
-  transform: rotate(45deg);
   animation-delay: 0s;
+  background: linear-gradient(90deg, transparent, rgba(58, 86, 104, 0.3), transparent);
 }
 
-.line-2 {
-  width: 150px;
-  height: 1px;
-  bottom: 30%;
-  left: 10%;
-  transform: rotate(-30deg);
-  animation-delay: -7s;
+.wave-2 {
+  top: 50%;
+  animation-delay: -2s;
+  background: linear-gradient(90deg, transparent, rgba(58, 86, 104, 0.2), transparent);
 }
 
-.line-3 {
-  width: 180px;
-  height: 1px;
-  top: 70%;
-  right: 25%;
-  transform: rotate(60deg);
-  animation-delay: -14s;
+.wave-3 {
+  top: 80%;
+  animation-delay: -4s;
+  background: linear-gradient(90deg, transparent, rgba(58, 86, 104, 0.1), transparent);
 }
 
-.line-4 {
-  width: 120px;
-  height: 2px;
-  top: 45%;
-  left: 5%;
-  transform: rotate(120deg);
-  animation-delay: -3s;
-  background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.4), transparent);
-  box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
-}
-
-.line-5 {
-  width: 160px;
-  height: 2px;
-  bottom: 10%;
-  right: 40%;
-  transform: rotate(-45deg);
-  animation-delay: -11s;
-  background: linear-gradient(90deg, transparent, rgba(64, 224, 208, 0.4), transparent);
-  box-shadow: 0 0 15px rgba(64, 224, 208, 0.3);
-}
-
-.line-6 {
-  width: 140px;
-  height: 2px;
-  top: 85%;
-  left: 40%;
-  transform: rotate(75deg);
-  animation-delay: -17s;
-  background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.3), transparent);
-  box-shadow: 0 0 12px rgba(255, 71, 87, 0.2);
-}
-
-@keyframes floatOrb {
+@keyframes soundWave {
   0%, 100% {
-    transform: translateY(0) scale(1);
-    opacity: 0.3;
-  }
-  33% {
-    transform: translateY(-20px) scale(1.1);
-    opacity: 0.6;
-  }
-  66% {
-    transform: translateY(10px) scale(0.9);
-    opacity: 0.4;
-  }
-}
-
-@keyframes floatLine {
-  0% {
-    transform: translateX(-100px) rotate(var(--rotation, 0deg));
+    transform: scaleX(0);
     opacity: 0;
   }
   50% {
+    transform: scaleX(1);
     opacity: 1;
   }
-  100% {
-    transform: translateX(100px) rotate(var(--rotation, 0deg));
-    opacity: 0;
-  }
 }
 
-/* Corner Effects - positioned away from players */
-.music-particles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.music-particle {
-  position: absolute;
-  border-radius: 50%;
-  animation: cornerPulse 8s ease-in-out infinite;
-}
-
-/* Corner orbs that don't interfere with player grid */
-.particle-1 { 
-  top: 5%; left: 2%; width: 40px; height: 40px;
-  background: radial-gradient(circle, rgba(255, 71, 87, 0.3), transparent);
-  animation-delay: 0s; 
-}
-.particle-2 { 
-  top: 5%; right: 2%; width: 50px; height: 50px;
-  background: radial-gradient(circle, rgba(64, 224, 208, 0.3), transparent);
-  animation-delay: -2s; 
-}
-.particle-3 { 
-  bottom: 5%; left: 2%; width: 45px; height: 45px;
-  background: radial-gradient(circle, rgba(255, 71, 87, 0.4), transparent);
-  animation-delay: -4s; 
-}
-.particle-4 { 
-  bottom: 5%; right: 2%; width: 35px; height: 35px;
-  background: radial-gradient(circle, rgba(64, 224, 208, 0.4), transparent);
-  animation-delay: -6s; 
-}
-
-/* Side edge effects */
-.particle-5 { 
-  top: 30%; left: 1%; width: 25px; height: 60px;
-  background: linear-gradient(180deg, transparent, rgba(255, 71, 87, 0.3), transparent);
-  border-radius: 15px;
-  animation-delay: -1s; 
-}
-.particle-6 { 
-  top: 60%; right: 1%; width: 30px; height: 70px;
-  background: linear-gradient(180deg, transparent, rgba(64, 224, 208, 0.3), transparent);
-  border-radius: 15px;
-  animation-delay: -3s; 
-}
-
-/* Top and bottom edge strips */
-.particle-7 { 
-  top: 1%; left: 20%; width: 100px; height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.4), transparent);
-  animation-delay: -5s; 
-}
-.particle-8 { 
-  top: 1%; right: 20%; width: 120px; height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(64, 224, 208, 0.4), transparent);
-  animation-delay: -7s; 
-}
-.particle-9 { 
-  bottom: 1%; left: 25%; width: 80px; height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.3), transparent);
-  animation-delay: -1.5s; 
-}
-.particle-10 { 
-  bottom: 1%; right: 25%; width: 90px; height: 3px;
-  background: linear-gradient(90deg, transparent, rgba(64, 224, 208, 0.3), transparent);
-  animation-delay: -3.5s; 
-}
-
-/* Additional corner accents */
-.particle-11 { 
-  top: 15%; left: 5%; width: 20px; height: 20px;
-  background: radial-gradient(circle, rgba(255, 71, 87, 0.2), transparent);
-  animation-delay: -2.5s; 
-}
-.particle-12 { 
-  bottom: 15%; right: 5%; width: 25px; height: 25px;
-  background: radial-gradient(circle, rgba(64, 224, 208, 0.2), transparent);
-  animation-delay: -4.5s; 
-}
-
-@keyframes cornerPulse {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(0.8);
-  }
-  25% {
-    opacity: 0.8;
-    transform: scale(1.2);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  75% {
-    opacity: 0.9;
-    transform: scale(1.1);
-  }
-}
 
 /* Spotify Players Container */
 .spotify-players-container {

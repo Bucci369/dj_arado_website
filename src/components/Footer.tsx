@@ -9,15 +9,15 @@ export default function Footer() {
         <div className="text-center">
           <div className="flex flex-wrap justify-center items-center gap-6 text-sm">
             <span className="text-gray-300">
-              © {currentYear} DJ ARADO - Deep & Tech House Artist aus Berlin
+              © {currentYear} DJ ARADO - Deep & Tech House Artist from Berlin
             </span>
             <span className="text-gray-400">•</span>
             <a href="#" className="text-gray-400 hover:text-gray-200 transition-colors">
-              Impressum
+              Legal Notice
             </a>
             <span className="text-gray-400">•</span>
             <a href="#" className="text-gray-400 hover:text-gray-200 transition-colors">
-              Datenschutz
+              Privacy Policy
             </a>
           </div>
         </div>

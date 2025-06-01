@@ -53,21 +53,21 @@ export default function BiographySection() {
     observer.observe(section)
 
     // GSAP Animationen
-    // Basis Section Animation
-    gsap.fromTo(section, 
-      { opacity: 0, y: 80 }, 
-      {
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power2.out",
-        scrollTrigger: { 
-          trigger: section, 
-          start: "top 80%", 
-          toggleActions: "play none none reverse" 
-        }
-      }
-    )
+    // Basis Section Animation - DISABLED to prevent black bar
+    // gsap.fromTo(section, 
+    //   { opacity: 0, y: 80 }, 
+    //   {
+    //     opacity: 1, 
+    //     y: 0, 
+    //     duration: 1, 
+    //     ease: "power2.out",
+    //     scrollTrigger: { 
+    //       trigger: section, 
+    //       start: "top 80%", 
+    //       toggleActions: "play none none reverse" 
+    //     }
+    //   }
+    // )
 
     // Titel Animation
     const titleLines = section.querySelectorAll('.title-line')
@@ -106,21 +106,23 @@ export default function BiographySection() {
       )
     }
 
-    // Bio Image Animation
+    // Bio Image Animation - basierend auf alter Website
     const bioImage = section.querySelector('.bio-image')
     if (bioImage) {
       gsap.fromTo(bioImage,
         { 
           opacity: 0, 
-          scale: 0.8, 
+          scale: 0.95, 
           rotateY: -15, 
-          x: -50 
+          rotateX: 10,
+          y: 50 
         },
         {
           opacity: 1,
           scale: 1,
           rotateY: 0,
-          x: 0,
+          rotateX: 0,
+          y: 0,
           duration: 1.2,
           ease: "power3.out",
           scrollTrigger: {
@@ -174,7 +176,7 @@ export default function BiographySection() {
         const rotateY = mouseXpercent * parallaxIntensityImage
         const rotateX = -mouseYpercent * parallaxIntensityImage * 0.6
         bioImageWrapper.style.transition = 'transform 0.05s linear'
-        bioImageWrapper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(${liftAmountImage}px)`
+        bioImageWrapper.style.transform = `rotateX(${rotateX - 8}deg) rotateY(${rotateY}deg) translateZ(${liftAmountImage}px)`
         parallaxAnimationId = null
       })
     }
@@ -185,22 +187,22 @@ export default function BiographySection() {
         parallaxAnimationId = null
       }
       bioImageWrapper.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-      bioImageWrapper.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)'
+      bioImageWrapper.style.transform = 'rotateX(-8deg) rotateY(0deg) translateZ(0px)'
     }
 
-    const bioContent = section.querySelector('.bio-content')
-    if (bioContent) {
-      bioContent.addEventListener('mousemove', handleMouseMove)
-      bioContent.addEventListener('mouseleave', handleMouseLeave)
+    // Mouse Parallax nur auf dem Bild selbst
+    if (bioImageWrapper) {
+      bioImageWrapper.addEventListener('mousemove', handleMouseMove)
+      bioImageWrapper.addEventListener('mouseleave', handleMouseLeave)
     }
 
     // Cleanup
     return () => {
       observer.disconnect()
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
-      if (bioContent) {
-        bioContent.removeEventListener('mousemove', handleMouseMove)
-        bioContent.removeEventListener('mouseleave', handleMouseLeave)
+      if (bioImageWrapper) {
+        bioImageWrapper.removeEventListener('mousemove', handleMouseMove)
+        bioImageWrapper.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
     
@@ -258,8 +260,12 @@ export default function BiographySection() {
   return (
     <section 
       ref={sectionRef}
-      id="ueber-mich" 
+      id="about-me" 
       className="page-section"
+      style={{
+        background: 'linear-gradient(to bottom, #0f1419 0%, #1a2832 100%)',
+        position: 'relative'
+      }}
     >
       <div 
         ref={particleContainerRef}
@@ -278,9 +284,27 @@ export default function BiographySection() {
         <div 
           ref={bioImageWrapperRef}
           className="bio-image-wrapper"
-          style={{ perspective: '1000px' }}
+          style={{ 
+            perspective: '800px',
+            position: 'relative',
+            width: '100%',
+            maxWidth: '320px',
+            margin: '0 auto',
+            willChange: 'transform'
+          }}
         >
-          <div className="bio-image">
+          <div 
+            className="bio-image"
+            style={{
+              position: 'relative',
+              borderRadius: '10px',
+              overflow: 'hidden',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08)',
+              opacity: 0,
+              transform: 'translateY(50px) rotateX(10deg) scale(0.95)',
+              willChange: 'transform, opacity'
+            }}
+          >
             <Image
               src="/assets/images/Profilbild1.jpg"
               alt="Foto von DJ ARADO"
@@ -288,9 +312,28 @@ export default function BiographySection() {
               height={400}
               className="bio-image-img"
               priority
-              style={{ width: '100%', height: 'auto', display: 'block' }}
+              style={{ 
+                width: '100%', 
+                height: 'auto', 
+                display: 'block',
+                transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                willChange: 'transform'
+              }}
             />
-            <div className="image-overlay"></div>
+            <div 
+              className="image-overlay"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: 'linear-gradient(135deg, rgba(64, 224, 208, 0.05) 0%, transparent 35%, transparent 65%, rgba(255, 71, 87, 0.05) 100%)',
+                opacity: 0.5,
+                transition: 'opacity 0.4s ease',
+                willChange: 'opacity'
+              }}
+            ></div>
           </div>
         </div>
         

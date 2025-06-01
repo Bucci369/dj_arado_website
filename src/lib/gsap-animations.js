@@ -62,23 +62,23 @@ export function initGSAPAnimations() {
 
   // GSAP ScrollTrigger Animationen
   
-  // Basis Sektionen Animation
-  gsap.utils.toArray(".page-section").forEach((section) => {
-    gsap.fromTo(section, 
-      { opacity: 0, y: 80 }, 
-      {
-        opacity: 1, 
-        y: 0, 
-        duration: 1, 
-        ease: "power2.out",
-        scrollTrigger: { 
-          trigger: section, 
-          start: "top 80%", 
-          toggleActions: "play none none reverse" 
-        }
-      }
-    )
-  })
+  // Basis Sektionen Animation - DISABLED (causes black bars)
+  // gsap.utils.toArray(".page-section").forEach((section) => {
+  //   gsap.fromTo(section, 
+  //     { opacity: 0, y: 80 }, 
+  //     {
+  //       opacity: 1, 
+  //       y: 0, 
+  //       duration: 1, 
+  //       ease: "power2.out",
+  //       scrollTrigger: { 
+  //         trigger: section, 
+  //         start: "top 80%", 
+  //         toggleActions: "play none none reverse" 
+  //       }
+  //     }
+  //   )
+  // })
 
   // Titel Animationen
   gsap.utils.toArray(".title-line").forEach((el, i) => {

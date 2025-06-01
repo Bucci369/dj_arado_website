@@ -24,12 +24,16 @@ export default function ContactSection() {
 
   return (
     <section 
-      id="kontakt" 
+      id="contact" 
       className="page-section section-is-white new-style-section"
+      style={{
+        background: 'linear-gradient(to bottom, #1a2832 0%, #050508 100%)',
+        position: 'relative'
+      }}
     >
       <div className="section-header">
         <h2 className="section-title">
-          <span className="title-line">Kontakt &</span>
+          <span className="title-line">Contact &</span>
           <span className="title-line">Booking</span>
         </h2>
         <div className="title-underline"></div>
@@ -42,7 +46,7 @@ export default function ContactSection() {
             <div className="contact-intro">
               <h3 className="contact-subtitle">Let&apos;s Make Music</h3>
               <p className="contact-description">
-                Bereit für unvergessliche Nächte? Lass uns über dein nächstes Event sprechen.
+                Ready for unforgettable nights? Let's talk about your next event.
               </p>
             </div>
 
@@ -66,7 +70,7 @@ export default function ContactSection() {
                   </svg>
                 </div>
                 <div>
-                  <h4>Telefon</h4>
+                  <h4>Phone</h4>
                   <p>+49 (0) 123 456 789</p>
                 </div>
               </div>
@@ -113,7 +117,7 @@ export default function ContactSection() {
 
           {/* Contact Form */}
           <div className="contact-form">
-            <h3 className="form-title">Booking Anfrage</h3>
+            <h3 className="form-title">Booking Request</h3>
             
             <form onSubmit={handleSubmit} className="booking-form">
               <div className="form-row">
@@ -125,7 +129,7 @@ export default function ContactSection() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    placeholder="Dein Name"
+                    placeholder="Your Name"
                   />
                 </div>
                 
@@ -137,7 +141,7 @@ export default function ContactSection() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    placeholder="deine@email.com"
+                    placeholder="your@email.com"
                   />
                 </div>
               </div>
@@ -149,29 +153,29 @@ export default function ContactSection() {
                   value={formData.subject}
                   onChange={handleChange}
                 >
-                  <option value="">Event Type wählen</option>
+                  <option value="">Choose Event Type</option>
                   <option value="club">Club Booking</option>
                   <option value="festival">Festival Booking</option>
                   <option value="private">Private Event</option>
                   <option value="corporate">Corporate Event</option>
-                  <option value="other">Sonstiges</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label>Nachricht *</label>
+                <label>Message *</label>
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   required
                   rows={5}
-                  placeholder="Erzähl mir von deinem Event..."
+                  placeholder="Tell me about your event..."
                 />
               </div>
 
               <button type="submit" className="submit-button">
-                Nachricht Senden
+                Send Message
               </button>
             </form>
           </div>

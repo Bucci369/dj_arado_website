@@ -5,12 +5,16 @@ import Image from 'next/image'
 export default function VideoSection() {
   return (
     <section 
-      id="meine-videos" 
+      id="videos" 
       className="page-section section-is-white new-style-section"
+      style={{
+        background: 'linear-gradient(to bottom, #3a5668 0%, #1a2832 100%)',
+        position: 'relative'
+      }}
     >
       <div className="section-header">
         <h2 className="section-title">
-          <span className="title-line">Meine</span>
+          <span className="title-line">My</span>
           <span className="title-line">Videos</span>
         </h2>
         <div className="title-underline"></div>
@@ -94,7 +98,7 @@ export default function VideoSection() {
         <div className="video-cta">
           <div className="cta-badge">
             <div className="live-indicator"></div>
-            <span>Mehr Videos auf YouTube & Vimeo</span>
+            <span>More Videos on YouTube & Vimeo</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>

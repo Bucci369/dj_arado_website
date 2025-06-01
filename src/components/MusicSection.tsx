@@ -245,7 +245,14 @@ export default function MusicSection() {
 
   if (loading) {
     return (
-      <section id="meine-musik" className="page-section section-is-white new-style-section">
+      <section 
+        id="my-music" 
+        className="page-section section-is-white new-style-section"
+        style={{
+          background: 'linear-gradient(to bottom, #1a2832 0%, #3a5668 100%)',
+          position: 'relative'
+        }}
+      >
         <div className="section-header">
           <h2 className="section-title">
             <span className="title-line">Meine</span>
@@ -263,35 +270,24 @@ export default function MusicSection() {
 
   return (
     <section 
-      id="meine-musik" 
+      id="my-music" 
       className="page-section section-is-white new-style-section"
+      style={{
+        background: 'linear-gradient(to bottom, #1a2832 0%, #3a5668 100%)',
+        position: 'relative'
+      }}
     >
-      {/* Abstract Background Animations */}
-      <div className="music-bg-animations">
-        <div className="floating-orb orb-1"></div>
-        <div className="floating-orb orb-2"></div>
-        <div className="floating-orb orb-3"></div>
-        <div className="floating-orb orb-4"></div>
-        <div className="floating-orb orb-5"></div>
-        <div className="floating-orb orb-6"></div>
-        <div className="floating-line line-1"></div>
-        <div className="floating-line line-2"></div>
-        <div className="floating-line line-3"></div>
-        <div className="floating-line line-4"></div>
-        <div className="floating-line line-5"></div>
-        <div className="floating-line line-6"></div>
-        {/* Particle effects between players */}
-        <div className="music-particles">
-          {[...Array(12)].map((_, i) => (
-            <div key={i} className={`music-particle particle-${i + 1}`}></div>
-          ))}
-        </div>
+      {/* Subtle Professional Background */}
+      <div className="music-bg-subtle">
+        <div className="sound-wave wave-1"></div>
+        <div className="sound-wave wave-2"></div>
+        <div className="sound-wave wave-3"></div>
       </div>
 
       <div className="section-header">
         <h2 className="section-title">
-          <span className="title-line">Meine</span>
-          <span className="title-line">Musik</span>
+          <span className="title-line">My</span>
+          <span className="title-line">Music</span>
         </h2>
         <div className="title-underline"></div>
       </div>

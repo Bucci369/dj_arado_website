@@ -1,15 +1,26 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+// Register GSAP plugin
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
+
 export default function StatsSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+
   const stats = [
     {
       number: 25,
-      label: "Jahre im Business",
+      label: "Years in Business",
       startValue: 10
     },
     {
       number: 192,
-      label: "Gespielte Clubs",
+      label: "Clubs Played",
       startValue: 0
     },
     {
@@ -30,17 +41,73 @@ export default function StatsSection() {
     startValue: 0
   }
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const section = sectionRef.current
+    if (!section) return
+
+    // Number formatting function
+    const formatNumberDE = (value: number) => {
+      return Math.round(value).toLocaleString('de-DE')
+    }
+
+    // Animate stats numbers
+    const statsItemsForNumberAnimation = section.querySelectorAll('.stat-item')
+    if (statsItemsForNumberAnimation.length > 0) {
+      statsItemsForNumberAnimation.forEach(item => {
+        const statNumberElement = item.querySelector('.stat-number') as HTMLElement
+        if (statNumberElement) {
+          const targetValue = parseFloat(statNumberElement.dataset.targetValue || '0')
+          let startValue = parseFloat(statNumberElement.dataset.startValue || '0')
+          if (isNaN(targetValue)) return
+          if (isNaN(startValue)) { startValue = 0 }
+
+          statNumberElement.textContent = formatNumberDE(startValue)
+          let animatedValue = { val: startValue }
+
+          gsap.to(animatedValue, {
+            val: targetValue,
+            duration: 2.5,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: statNumberElement,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+            onUpdate: () => { 
+              statNumberElement.textContent = formatNumberDE(animatedValue.val)
+            },
+            onComplete: () => { 
+              statNumberElement.textContent = formatNumberDE(targetValue)
+            }
+          })
+        }
+      })
+    }
+
+    // Cleanup
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+    }
+  }, [])
+
   return (
     <section 
-      id="meine-stats" 
-      className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center bg-white text-black"
+      ref={sectionRef}
+      id="stats" 
+      className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white"
+      style={{
+        background: 'linear-gradient(to bottom, #3a5668 0%, #1a2832 100%)',
+        position: 'relative'
+      }}
     >
       <div className="section-header mb-16">
-        <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-black uppercase tracking-wide text-center mb-4">
+        <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
           <span className="title-line block">My</span>
           <span className="title-line block">Impact</span>
         </h2>
-        <div className="title-underline w-12 h-1 bg-gradient-to-r from-gray-600 to-gray-800 mx-auto"></div>
+        <div className="title-underline w-12 h-1 bg-gradient-to-r from-cyan-400 to-cyan-600 mx-auto"></div>
       </div>
 
       <div className="stats-container max-w-4xl w-full mx-auto px-4">
@@ -49,14 +116,14 @@ export default function StatsSection() {
           {stats.map((stat, index) => (
             <div key={index} className="stat-item text-center">
               <span 
-                className="stat-number block text-5xl md:text-6xl lg:text-7xl font-extrabold text-black leading-tight mb-2"
+                className="stat-number block text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-2"
                 data-target-value={stat.number}
                 data-start-value={stat.startValue}
               >
                 {stat.startValue}
               </span>
-              <hr className="stat-separator w-12 h-0.5 bg-gray-300 border-none mx-auto my-2" />
-              <span className="stat-label text-sm md:text-base text-gray-600 uppercase tracking-widest font-medium">
+              <hr className="stat-separator w-12 h-0.5 bg-cyan-400 border-none mx-auto my-2" />
+              <span className="stat-label text-sm md:text-base text-cyan-200 uppercase tracking-widest font-medium">
                 {stat.label}
               </span>
             </div>
@@ -66,14 +133,14 @@ export default function StatsSection() {
         {/* Spotify Stats - Larger, centered */}
         <div className="spotify-item stat-item text-center">
           <span 
-            className="stat-number spotify-plays block text-6xl md:text-7xl lg:text-8xl font-extrabold text-black leading-tight mb-4"
+            className="stat-number spotify-plays block text-6xl md:text-7xl lg:text-8xl font-extrabold text-white leading-tight mb-4"
             data-target-value={spotifyStats.number}
             data-start-value={spotifyStats.startValue}
           >
             {spotifyStats.startValue}
           </span>
-          <hr className="stat-separator w-16 h-0.5 bg-gray-300 border-none mx-auto my-3" />
-          <span className="stat-label text-lg md:text-xl text-gray-600 uppercase tracking-widest font-medium">
+          <hr className="stat-separator w-16 h-0.5 bg-cyan-400 border-none mx-auto my-3" />
+          <span className="stat-label text-lg md:text-xl text-cyan-200 uppercase tracking-widest font-medium">
             {spotifyStats.label}
           </span>
         </div>
