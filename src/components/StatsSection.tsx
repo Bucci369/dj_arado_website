@@ -64,7 +64,7 @@ export default function StatsSection() {
           if (isNaN(startValue)) { startValue = 0 }
 
           statNumberElement.textContent = formatNumberDE(startValue)
-          let animatedValue = { val: startValue }
+          const animatedValue = { val: startValue }
 
           gsap.to(animatedValue, {
             val: targetValue,
