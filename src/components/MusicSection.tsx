@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 
 interface SpotifyTrack {
   id: string
@@ -31,10 +31,6 @@ export default function MusicSection() {
   const [loading, setLoading] = useState(true)
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([])
 
-  useEffect(() => {
-    fetchSpotifyTracks()
-  }, [])
-
   const getStoredAradoTracks = (): SpotifyTrack[] => {
     try {
       const stored = localStorage.getItem('aradoTracks')
@@ -52,7 +48,7 @@ export default function MusicSection() {
     }
   }
 
-  const fetchSpotifyTracks = async () => {
+  const fetchSpotifyTracks = useCallback(async () => {
     try {
       setLoading(true)
       
@@ -89,7 +85,7 @@ export default function MusicSection() {
             
             if (data.tracks && data.tracks.length > 0) {
               // Filter for Arado/electronic tracks only
-              const filteredTracks = data.tracks.filter((track: any) => {
+              const filteredTracks = data.tracks.filter((track: SpotifyTrack) => {
                 const trackName = track.name.toLowerCase()
                 const artistName = track.artists[0]?.name.toLowerCase() || ''
                 const albumName = track.album?.name.toLowerCase() || ''
@@ -119,7 +115,7 @@ export default function MusicSection() {
               }
             }
           }
-        } catch (searchError) {
+        } catch {
           console.log(`Search failed for: ${searchTerm}`)
           continue
         }
@@ -137,7 +133,11 @@ export default function MusicSection() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchSpotifyTracks()
+  }, [fetchSpotifyTracks])
 
   const getFallbackTracks = (): SpotifyTrack[] => [
     {
@@ -231,7 +231,7 @@ export default function MusicSection() {
   }
 
   useEffect(() => {
-    audioRefs.current.forEach((audio, index) => {
+    audioRefs.current.forEach((audio) => {
       if (audio) {
         const handleEnded = () => {
           setIsPlaying(false)
@@ -364,7 +364,9 @@ export default function MusicSection() {
             {/* Audio Element */}
             {track.preview_url && (
               <audio
-                ref={(el) => (audioRefs.current[index] = el)}
+                ref={(el) => {
+                  audioRefs.current[index] = el;
+                }}
                 src={track.preview_url}
                 preload="metadata"
               />

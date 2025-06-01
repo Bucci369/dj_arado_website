@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 export default function VideoSection() {
   return (
     <section 
@@ -18,7 +20,7 @@ export default function VideoSection() {
         <div className="video-grid">
           <div className="video-item featured-video">
             <div className="video-thumbnail">
-              <img src="/assets/images/image1.jpg" alt="Berghain Set 2024" />
+              <Image src="/assets/images/image1.jpg" alt="Berghain Set 2024" width={400} height={225} className="video-thumbnail-img" />
               <div className="video-overlay">
                 <div className="play-button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -30,13 +32,13 @@ export default function VideoSection() {
             </div>
             <div className="video-info">
               <h3 className="video-title">Berghain Set 2024</h3>
-              <p className="video-description">Epic 4-hour journey through techno - Live from Berlin's legendary club</p>
+              <p className="video-description">Epic 4-hour journey through techno - Live from Berlin&apos;s legendary club</p>
             </div>
           </div>
 
           <div className="video-item">
             <div className="video-thumbnail">
-              <img src="/assets/images/Profilbild1.jpg" alt="Studio Session" />
+              <Image src="/assets/images/Profilbild1.jpg" alt="Studio Session" width={400} height={225} className="video-thumbnail-img" />
               <div className="video-overlay">
                 <div className="play-button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -54,7 +56,7 @@ export default function VideoSection() {
 
           <div className="video-item">
             <div className="video-thumbnail">
-              <img src="/assets/images/image1.jpg" alt="Festival Highlights" />
+              <Image src="/assets/images/image1.jpg" alt="Festival Highlights" width={400} height={225} className="video-thumbnail-img" />
               <div className="video-overlay">
                 <div className="play-button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -72,7 +74,7 @@ export default function VideoSection() {
 
           <div className="video-item">
             <div className="video-thumbnail">
-              <img src="/assets/images/Profilbild1.jpg" alt="Mix Tutorial" />
+              <Image src="/assets/images/Profilbild1.jpg" alt="Mix Tutorial" width={400} height={225} className="video-thumbnail-img" />
               <div className="video-overlay">
                 <div className="play-button">
                   <svg viewBox="0 0 24 24" fill="currentColor">

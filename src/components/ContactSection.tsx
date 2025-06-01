@@ -40,7 +40,7 @@ export default function ContactSection() {
           {/* Contact Info */}
           <div className="contact-info">
             <div className="contact-intro">
-              <h3 className="contact-subtitle">Let's Make Music</h3>
+              <h3 className="contact-subtitle">Let&apos;s Make Music</h3>
               <p className="contact-description">
                 Bereit für unvergessliche Nächte? Lass uns über dein nächstes Event sprechen.
               </p>

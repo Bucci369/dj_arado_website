@@ -1,9 +1,7 @@
 'use client'
 
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useEffect, useState, useRef, useMemo } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useState, useRef } from 'react'
 
 export default function LandingSection() {
   const [isVisible, setIsVisible] = useState(false)
@@ -67,6 +65,11 @@ export default function LandingSection() {
   const djName = "DJ ARADO"
   const sloganTextPart1 = "Sounds that";
   const sloganTextPart2 = "move your soul!";
+
+
+  // Simplified approach without individual letter transforms to avoid React hooks issues
+  const globalOpacity = useTransform(scrollYProgress, [0.1, 0.8], [1, 0]);
+  const globalY = useTransform(scrollYProgress, [0.1, 0.8], [0, -200]);
 
   return (
     <>
@@ -216,38 +219,15 @@ export default function LandingSection() {
               animate={isVisible ? "visible" : "hidden"}
               className="block text-gray-300"
             >
-              {sloganTextPart1.split('').map((char, index) => {
-                // Deterministische Werte basierend auf Index statt Math.random()
-                const chaosEndX = useMemo(() => ((index * 73.7 + 127.3) % 1000) - 500, [index]);
-                const chaosEndY = useMemo(() => ((index * 61.1 + 87.4) % 600) - 300, [index]);
-                const chaosEndRotate = useMemo(() => ((index * 97.3 + 213.7) % 720) - 360, [index]);
-                
-                // GEÄNDERT: Animation startet früher und ist schneller abgeschlossen
-                const startScroll = 0.05 + index * 0.005; 
-                const endScroll = 0.6 + index * 0.005;   
-
-                const letterX = useTransform(scrollYProgress, [startScroll, endScroll], [0, chaosEndX]);
-                const letterY = useTransform(scrollYProgress, [startScroll, endScroll], [0, chaosEndY]);
-                const letterRotate = useTransform(scrollYProgress, [startScroll, endScroll], [0, chaosEndRotate]);
-                const letterOpacity = useTransform(scrollYProgress, [startScroll, Math.min(endScroll, 0.5)], [1, 0]);
-
-                return (
-                  <motion.span
-                    key={`slogan1-${index}`}
-                    suppressHydrationWarning
-                    style={{
-                      display: 'inline-block',
-                      marginRight: char === ' ' ? '0.3em' : '0',
-                      x: letterX,
-                      y: letterY,
-                      rotate: letterRotate,
-                      opacity: letterOpacity,
-                    }}
-                  >
-                    {char === ' ' ? '\u00A0' : char}
-                  </motion.span>
-                );
-              })}
+              <motion.span
+                style={{
+                  display: 'block',
+                  opacity: globalOpacity,
+                  y: globalY,
+                }}
+              >
+                {sloganTextPart1}
+              </motion.span>
             </motion.div>
 
             <motion.div
@@ -257,38 +237,15 @@ export default function LandingSection() {
               animate={isVisible ? "visible" : "hidden"}
               className="block text-white font-medium"
             >
-              {sloganTextPart2.split('').map((char, index) => {
-                // Deterministische Werte basierend auf Index statt Math.random()
-                const chaosEndX = useMemo(() => ((index * 83.2 + 197.5) % 1000) - 500, [index]);
-                const chaosEndY = useMemo(() => ((index * 71.8 + 143.1) % 600) - 300, [index]);
-                const chaosEndRotate = useMemo(() => ((index * 89.4 + 267.9) % 720) - 360, [index]);
-                
-                // GEÄNDERT: Animation startet früher und ist schneller abgeschlossen
-                const startScroll = 0.05 + index * 0.005; 
-                const endScroll = 0.6 + index * 0.005;   
-
-                const letterX = useTransform(scrollYProgress, [startScroll, endScroll], [0, chaosEndX]);
-                const letterY = useTransform(scrollYProgress, [startScroll, endScroll], [0, chaosEndY]);
-                const letterRotate = useTransform(scrollYProgress, [startScroll, endScroll], [0, chaosEndRotate]);
-                const letterOpacity = useTransform(scrollYProgress, [startScroll, Math.min(endScroll, 0.5)], [1, 0]);
-
-                return (
-                  <motion.span
-                    key={`slogan2-${index}`}
-                    suppressHydrationWarning
-                    style={{
-                      display: 'inline-block',
-                      marginRight: char === ' ' ? '0.3em' : '0',
-                      x: letterX,
-                      y: letterY,
-                      rotate: letterRotate,
-                      opacity: letterOpacity,
-                    }}
-                  >
-                    {char === ' ' ? '\u00A0' : char}
-                  </motion.span>
-                );
-              })}
+              <motion.span
+                style={{
+                  display: 'block',
+                  opacity: globalOpacity,
+                  y: globalY,
+                }}
+              >
+                {sloganTextPart2}
+              </motion.span>
             </motion.div>
           </div>
         </div>

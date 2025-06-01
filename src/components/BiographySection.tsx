@@ -162,14 +162,15 @@ export default function BiographySection() {
     const parallaxIntensityImage = 10
     const liftAmountImage = 10
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: Event) => {
+      const mouseEvent = e as MouseEvent;
       if (!section.classList.contains('is-visible')) return
       
       if (parallaxAnimationId) return
       parallaxAnimationId = requestAnimationFrame(() => {
         const rect = bioImageWrapper.getBoundingClientRect()
-        const mouseXpercent = ((e.clientX - rect.left - rect.width / 2) / (rect.width / 2))
-        const mouseYpercent = ((e.clientY - rect.top - rect.height / 2) / (rect.height / 2))
+        const mouseXpercent = ((mouseEvent.clientX - rect.left - rect.width / 2) / (rect.width / 2))
+        const mouseYpercent = ((mouseEvent.clientY - rect.top - rect.height / 2) / (rect.height / 2))
         const rotateY = mouseXpercent * parallaxIntensityImage
         const rotateX = -mouseYpercent * parallaxIntensityImage * 0.6
         bioImageWrapper.style.transition = 'transform 0.05s linear'
@@ -202,18 +203,17 @@ export default function BiographySection() {
         bioContent.removeEventListener('mouseleave', handleMouseLeave)
       }
     }
+    
+    // Partikel-Funktion
+    const initUeberMichParticles = (container: HTMLDivElement) => {
+      createGenericParticles(container, 20, 'particle')
+    }
   }, [])
-
-  // Partikel-Funktion
-  const initUeberMichParticles = (container: HTMLDivElement) => {
-    createGenericParticles(container, 20, 'particle', 'ueberMichParticleFloat')
-  }
 
   const createGenericParticles = (
     container: HTMLDivElement, 
     count: number, 
-    particleClass: string, 
-    animationNamePrefix: string
+    particleClass: string
   ) => {
     const fragment = document.createDocumentFragment()
     const defaults = { 
@@ -296,13 +296,13 @@ export default function BiographySection() {
         
         <div className="bio-text">
           <p className="bio-paragraph">
-            From Desolat and Remote Area to Moon Harbour via Düsseldorf – in short, that's how Arado's story is best summed up. With the spotlight getting brighter for this talented German export, he's already accrued a world-wide scroll of premium parties at Cocoon and Watergate Germany, Tenax in Italy, Café D'Anvers in Belgium, WMC in Miami, and a legendary closing finale last season at Space in Ibiza.
+            From Desolat and Remote Area to Moon Harbour via Düsseldorf – in short, that&apos;s how Arado&apos;s story is best summed up. With the spotlight getting brighter for this talented German export, he&apos;s already accrued a world-wide scroll of premium parties at Cocoon and Watergate Germany, Tenax in Italy, Café D&apos;Anvers in Belgium, WMC in Miami, and a legendary closing finale last season at Space in Ibiza.
           </p>
           <p className="bio-paragraph">
-            Arado is genuine proof that almost everything is possible with the right amount of dedication and perseverance. As an undeniably talented producer - his "Uganda Express" release, signed by Loco Dice for his Desolat label, kick-started his career to international status.
+            Arado is genuine proof that almost everything is possible with the right amount of dedication and perseverance. As an undeniably talented producer - his &quot;Uganda Express&quot; release, signed by Loco Dice for his Desolat label, kick-started his career to international status.
           </p>
           <p className="bio-paragraph">
-            Following this acclaimed release came other outstanding productions on labels such as All Inn and Dame Music, which ultimately led to an EP on Matthias Tanzmann's Moon Harbour label that even took him aboard their booking squad.
+            Following this acclaimed release came other outstanding productions on labels such as All Inn and Dame Music, which ultimately led to an EP on Matthias Tanzmann&apos;s Moon Harbour label that even took him aboard their booking squad.
           </p>
           <p className="bio-paragraph">
             Whether in the beginning in partnership with Den Ishu or nowadays in collaboration with Italian Marco Faraone, Arada simply knows a thing or two about rocking the Deep & Tech House Floors worldwide. His raw, driving grooves with a Chicago edge enjoy the support of the international DJ elite, and are responsible for propelling him to the top of the rankings as an electronic music artist.

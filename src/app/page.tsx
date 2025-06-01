@@ -9,8 +9,6 @@ import VideoSection from '@/components/VideoSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 import ScrollBackground from '@/components/ScrollBackground'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 export default function Home() {
   return (

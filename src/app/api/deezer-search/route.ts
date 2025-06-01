@@ -24,7 +24,16 @@ export async function GET(request: Request) {
     const data = await response.json()
     
     // Transform Deezer data to our format
-    const transformedTracks = data.data?.map((track: any) => ({
+    const transformedTracks = data.data?.map((track: {
+      id: number;
+      title: string;
+      preview: string;
+      link: string;
+      album: { title: string; cover_xl?: string; cover_big?: string; cover_medium?: string; cover: string };
+      artist: { name: string };
+      duration: number;
+      rank?: number;
+    }) => ({
       id: track.id.toString(),
       name: track.title,
       preview_url: track.preview, // 30-second preview URL
