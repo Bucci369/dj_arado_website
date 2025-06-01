@@ -71,20 +71,94 @@ export default function LandingSection() {
   const sloganPart1Letters = sloganTextPart1.split('');
   const sloganPart2Letters = sloganTextPart2.split('');
   
-  // Create individual transforms for each letter with different scroll ranges for chaos
-  const createLetterTransforms = (letterIndex: number, totalLetters: number) => {
-    const randomStart = 0.1 + (letterIndex / totalLetters) * 0.2;
-    const randomEnd = 0.6 + (letterIndex / totalLetters) * 0.3;
-    const randomYOffset = -50 - (letterIndex * 15) - (Math.sin(letterIndex) * 30);
-    const randomRotation = (letterIndex % 2 === 0 ? 1 : -1) * (10 + letterIndex * 5);
-    
-    return {
-      opacity: useTransform(scrollYProgress, [randomStart, randomEnd], [1, 0]),
-      y: useTransform(scrollYProgress, [randomStart, randomEnd], [0, randomYOffset]),
-      rotate: useTransform(scrollYProgress, [randomStart, randomEnd], [0, randomRotation]),
-      scale: useTransform(scrollYProgress, [randomStart, randomEnd], [1, 0.3])
-    };
+  // Create individual transforms for each letter - all hooks at component level
+  const letter0Transform = {
+    opacity: useTransform(scrollYProgress, [0.1, 0.6], [1, 0]),
+    y: useTransform(scrollYProgress, [0.1, 0.6], [0, -50]),
+    rotate: useTransform(scrollYProgress, [0.1, 0.6], [0, 10]),
+    scale: useTransform(scrollYProgress, [0.1, 0.6], [1, 0.3])
   };
+  
+  const letter1Transform = {
+    opacity: useTransform(scrollYProgress, [0.12, 0.65], [1, 0]),
+    y: useTransform(scrollYProgress, [0.12, 0.65], [0, -65]),
+    rotate: useTransform(scrollYProgress, [0.12, 0.65], [0, -15]),
+    scale: useTransform(scrollYProgress, [0.12, 0.65], [1, 0.3])
+  };
+  
+  const letter2Transform = {
+    opacity: useTransform(scrollYProgress, [0.14, 0.7], [1, 0]),
+    y: useTransform(scrollYProgress, [0.14, 0.7], [0, -80]),
+    rotate: useTransform(scrollYProgress, [0.14, 0.7], [0, 20]),
+    scale: useTransform(scrollYProgress, [0.14, 0.7], [1, 0.3])
+  };
+  
+  const letter3Transform = {
+    opacity: useTransform(scrollYProgress, [0.16, 0.75], [1, 0]),
+    y: useTransform(scrollYProgress, [0.16, 0.75], [0, -95]),
+    rotate: useTransform(scrollYProgress, [0.16, 0.75], [0, -25]),
+    scale: useTransform(scrollYProgress, [0.16, 0.75], [1, 0.3])
+  };
+  
+  const letter4Transform = {
+    opacity: useTransform(scrollYProgress, [0.18, 0.8], [1, 0]),
+    y: useTransform(scrollYProgress, [0.18, 0.8], [0, -110]),
+    rotate: useTransform(scrollYProgress, [0.18, 0.8], [0, 30]),
+    scale: useTransform(scrollYProgress, [0.18, 0.8], [1, 0.3])
+  };
+  
+  const letter5Transform = {
+    opacity: useTransform(scrollYProgress, [0.2, 0.85], [1, 0]),
+    y: useTransform(scrollYProgress, [0.2, 0.85], [0, -125]),
+    rotate: useTransform(scrollYProgress, [0.2, 0.85], [0, -35]),
+    scale: useTransform(scrollYProgress, [0.2, 0.85], [1, 0.3])
+  };
+  
+  const letter6Transform = {
+    opacity: useTransform(scrollYProgress, [0.22, 0.9], [1, 0]),
+    y: useTransform(scrollYProgress, [0.22, 0.9], [0, -140]),
+    rotate: useTransform(scrollYProgress, [0.22, 0.9], [0, 40]),
+    scale: useTransform(scrollYProgress, [0.22, 0.9], [1, 0.3])
+  };
+  
+  const letter7Transform = {
+    opacity: useTransform(scrollYProgress, [0.24, 0.95], [1, 0]),
+    y: useTransform(scrollYProgress, [0.24, 0.95], [0, -155]),
+    rotate: useTransform(scrollYProgress, [0.24, 0.95], [0, -45]),
+    scale: useTransform(scrollYProgress, [0.24, 0.95], [1, 0.3])
+  };
+  
+  const letter8Transform = {
+    opacity: useTransform(scrollYProgress, [0.26, 1.0], [1, 0]),
+    y: useTransform(scrollYProgress, [0.26, 1.0], [0, -170]),
+    rotate: useTransform(scrollYProgress, [0.26, 1.0], [0, 50]),
+    scale: useTransform(scrollYProgress, [0.26, 1.0], [1, 0.3])
+  };
+  
+  const letter9Transform = {
+    opacity: useTransform(scrollYProgress, [0.28, 1.0], [1, 0]),
+    y: useTransform(scrollYProgress, [0.28, 1.0], [0, -185]),
+    rotate: useTransform(scrollYProgress, [0.28, 1.0], [0, -55]),
+    scale: useTransform(scrollYProgress, [0.28, 1.0], [1, 0.3])
+  };
+  
+  const letter10Transform = {
+    opacity: useTransform(scrollYProgress, [0.3, 1.0], [1, 0]),
+    y: useTransform(scrollYProgress, [0.3, 1.0], [0, -200]),
+    rotate: useTransform(scrollYProgress, [0.3, 1.0], [0, 60]),
+    scale: useTransform(scrollYProgress, [0.3, 1.0], [1, 0.3])
+  };
+  
+  const letterTransforms = [
+    letter0Transform, letter1Transform, letter2Transform, letter3Transform,
+    letter4Transform, letter5Transform, letter6Transform, letter7Transform, 
+    letter8Transform, letter9Transform, letter10Transform,
+    // Add more transforms for "move your soul!" 
+    letter0Transform, letter1Transform, letter2Transform, letter3Transform,
+    letter4Transform, letter5Transform, letter6Transform, letter7Transform,
+    letter8Transform, letter9Transform, letter10Transform, letter0Transform,
+    letter1Transform, letter2Transform, letter3Transform
+  ];
 
   return (
     <>
@@ -235,7 +309,7 @@ export default function LandingSection() {
               className="block text-gray-300"
             >
               {sloganPart1Letters.map((char, index) => {
-                const transforms = createLetterTransforms(index, sloganPart1Letters.length);
+                const transforms = letterTransforms[index];
                 return (
                   <motion.span
                     key={index}
@@ -262,7 +336,7 @@ export default function LandingSection() {
               className="block text-white font-medium"
             >
               {sloganPart2Letters.map((char, index) => {
-                const transforms = createLetterTransforms(index + sloganPart1Letters.length, sloganPart1Letters.length + sloganPart2Letters.length);
+                const transforms = letterTransforms[index + sloganPart1Letters.length];
                 return (
                   <motion.span
                     key={index}
