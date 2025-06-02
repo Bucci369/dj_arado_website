@@ -202,20 +202,28 @@ export function initGSAPAnimations() {
     })
   }
   
-  // Zoom-In Animation für Listen
+  // Zoom-In Animation für Listen - DRAMATISCHER & FRÜHER
   gsap.utils.toArray('.zoom-list-item').forEach((item, index) => {
     gsap.fromTo(item,
-      { opacity: 0, scale: 0.5, y: 20 },
+      { 
+        opacity: 0, 
+        scale: 0.1, // Startet viel kleiner für dramatischeren Effekt
+        y: 80, // Mehr vertikale Bewegung
+        rotation: -15, // Leichte Rotation hinzufügen
+        filter: "blur(10px)" // Blur Effekt für mehr Drama
+      },
       {
         opacity: 1,
         scale: 1,
         y: 0,
-        duration: 0.7,
-        delay: index * 0.1,
-        ease: "power3.out",
+        rotation: 0,
+        filter: "blur(0px)",
+        duration: 1.2, // Längere Duration für smootheren Effekt
+        delay: index * 0.08, // Schnellerer Stagger
+        ease: "back.out(2.5)", // Dramatischer bounce Effekt
         scrollTrigger: {
           trigger: item,
-          start: "top 90%",
+          start: "top 95%", // Früher starten (95% statt 90%)
           toggleActions: "play none none reverse",
         }
       }

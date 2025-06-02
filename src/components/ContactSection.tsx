@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import MagneticButton from './MagneticButton'
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -174,9 +175,13 @@ export default function ContactSection() {
                 />
               </div>
 
-              <button type="submit" className="submit-button">
+              <MagneticButton 
+                type="submit" 
+                className="submit-button"
+                intensity={20}
+              >
                 Send Message
-              </button>
+              </MagneticButton>
             </form>
           </div>
         </div>
