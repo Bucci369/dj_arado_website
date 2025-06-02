@@ -39,7 +39,7 @@ export default function TextReveal({
     // Clear the original text and create spans for each character
     textElement.innerHTML = ''
     
-    chars.forEach((char, index) => {
+    chars.forEach((char, _) => { // <-- Ändere 'index' zu '_'
       const span = document.createElement('span')
       span.textContent = char === ' ' ? '\u00A0' : char // Non-breaking space
       span.style.display = 'inline-block'
