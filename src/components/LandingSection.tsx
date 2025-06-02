@@ -3,50 +3,90 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
-// GSAP wird für diesen spezifischen Effekt nicht benötigt, kann aber für andere Dinge bleiben
-// import { gsap } from 'gsap'; 
-// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function LandingSection() {
   const [isMounted, setIsMounted] = useState(false);
+  const [scrambleComplete, setScrambleComplete] = useState(false);
+  const [rFlipped, setRFlipped] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   
-  const nameToAnimate = "ARADO";
+  const targetName = "ARADO";
+  
+  // Character pool für LDR-style scramble
+  const glitchChars = ['@', '#', '$', '%', '&', '*', '/', '\\', '|', '?', '!', '~', '^', '¿', '¡', '§', '±', '∞', '∑', '∂', '∆', '∏', '√', '∫', '≈', '≠', '≤', '≥', '◊', '◆', '●', '○', '□', '■', '△', '▽', '◉', '◎', '◐', '◑'];
+  const alphaChars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  const allChars = [...glitchChars, ...alphaChars];
+  
+  // State für scramble characters
+  const [displayChars, setDisplayChars] = useState<string[]>(targetName.split(''));
+  
+  // LDR-style scramble effect
+  useEffect(() => {
+    if (!isMounted) return;
+    
+    const scrambleIntervals: NodeJS.Timeout[] = [];
+    const finalTimeouts: NodeJS.Timeout[] = [];
+    
+    // Start scrambling each character
+    targetName.split('').forEach((targetChar, index) => {
+      const scrambleDuration = 1500 + Math.random() * 1000; // 1.5-2.5s
+      const scrambleSpeed = 50 + Math.random() * 50; // 50-100ms
+      
+      let scrambleCount = 0;
+      const maxScrambles = Math.floor(scrambleDuration / scrambleSpeed);
+      
+      const interval = setInterval(() => {
+        scrambleCount++;
+        
+        setDisplayChars(prev => {
+          const newChars = [...prev];
+          // Mix of glitch and alpha characters
+          if (scrambleCount < maxScrambles * 0.7) {
+            // More glitchy at the beginning
+            newChars[index] = allChars[Math.floor(Math.random() * allChars.length)];
+          } else {
+            // More alphabetic towards the end
+            newChars[index] = alphaChars[Math.floor(Math.random() * alphaChars.length)];
+          }
+          return newChars;
+        });
+      }, scrambleSpeed);
+      
+      scrambleIntervals.push(interval);
+      
+      // Stop scrambling and set final character
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+        setDisplayChars(prev => {
+          const newChars = [...prev];
+          newChars[index] = targetChar;
+          return newChars;
+        });
+        
+        // Check if all characters are complete
+        if (index === targetName.length - 1) {
+          setTimeout(() => {
+            setScrambleComplete(true);
+            // Flip R after scramble completes
+            setTimeout(() => setRFlipped(true), 300);
+          }, 200);
+        }
+      }, scrambleDuration);
+      
+      finalTimeouts.push(timeout);
+    });
+    
+    return () => {
+      scrambleIntervals.forEach(clearInterval);
+      finalTimeouts.forEach(clearTimeout);
+    };
+  }, [isMounted]);
 
-  // Framer Motion Varianten für den Namen "ARADO"
-  const nameContainerAnimation = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.3, // Kleiner Delay bevor die Buchstabenanimation startet
-        staggerChildren: 0.1, // Abstand zwischen den Buchstabenanimationen für Kaskade
-      },
-    },
-  };
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  const nameLetterAnimation = {
-    hidden: { 
-      opacity: 0, 
-      y: 20,          // Startet leicht verschoben
-      rotateX: -90,   // Startet um 90 Grad gekippt (von oben oder unten, je nach transformOrigin)
-      transformOrigin: "center bottom", // Dreht um die untere Kante des Buchstabens
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      transition: { 
-        type: "spring", 
-        damping: 12, 
-        stiffness: 100,
-        // duration: 0.5, // Alternative mit duration und ease
-        // ease: [0.6, 0.01, -0.05, 0.95] 
-      },
-    },
-  };
-
-  // Framer Motion Logik für den Slogan (bleibt wie von dir detailliert definiert)
+  // Scroll-basierte Animationen für Slogan
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"] 
@@ -54,7 +94,7 @@ export default function LandingSection() {
 
   const sloganPartContainerAnimation = { 
     hidden: (isPart1: boolean) => ({ x: isPart1 ? -200 : 200, opacity: 0 }),
-    visible: (isPart1: boolean) => ({ x: 0, opacity: 1, transition: { delay: isPart1 ? 1.0 : 1.3, duration: 0.8, ease: "easeOut" } }), // Delays angepasst
+    visible: (isPart1: boolean) => ({ x: 0, opacity: 1, transition: { delay: isPart1 ? 2.8 : 3.1, duration: 0.8, ease: "easeOut" } }),
   };
 
   const sloganTextPart1 = "Sounds that";
@@ -62,8 +102,7 @@ export default function LandingSection() {
   const sloganPart1Letters = sloganTextPart1.split('');
   const sloganPart2Letters = sloganTextPart2.split('');
   
-  // --- DEINE ORIGINALEN letterXTransform DEFINITIONEN FÜR DEN SLOGAN ---
-  // (Aus deiner Datei LandingSection.tsx von ca. 23:00 Uhr Sonntag)
+  // Letter transforms für Slogan scroll effect
   const letter0Transform = {
     opacity: useTransform(scrollYProgress, [0.1, 0.6], [1, 0]),
     x: useTransform(scrollYProgress, [0.1, 0.6], [0, -120]),
@@ -151,53 +190,239 @@ export default function LandingSection() {
     letter8Transform, letter9Transform, letter10Transform, letter0Transform,
     letter1Transform, letter2Transform, letter3Transform
   ];
-  // --- ENDE DEINER SLOGAN letterTransforms ---
-
-  useEffect(() => {
-    setIsMounted(true); 
-  }, []);
 
   return (
     <>
+      <style jsx global>{`
+        /* LDR Glitch Effects */
+        @keyframes glitch-flicker {
+          0%, 100% { opacity: 1; }
+          92% { opacity: 1; }
+          92.5% { opacity: 0.6; }
+          93% { opacity: 1; }
+          93.5% { opacity: 0.4; }
+          94% { opacity: 1; }
+        }
+
+        @keyframes rgb-split {
+          0%, 100% {
+            text-shadow: 
+              0 0 0 transparent,
+              0 0 0 transparent;
+          }
+          20% {
+            text-shadow: 
+              -2px 0 #ff0080,
+              2px 0 #00ffff;
+          }
+          40% {
+            text-shadow: 
+              2px 0 #ff0080,
+              -2px 0 #00ffff;
+          }
+          60% {
+            text-shadow: 
+              -1px 0 #ff0080,
+              1px 0 #00ffff;
+          }
+          80% {
+            text-shadow: 
+              1px 0 #ff0080,
+              -1px 0 #00ffff;
+          }
+        }
+
+        @keyframes digital-distortion {
+          0%, 100% { 
+            filter: none; 
+            transform: translate(0, 0) skew(0deg);
+          }
+          20% { 
+            filter: blur(0.5px); 
+            transform: translate(-1px, 0) skew(0.5deg);
+          }
+          40% { 
+            filter: blur(0px); 
+            transform: translate(1px, 0) skew(-0.5deg);
+          }
+          60% { 
+            filter: blur(0.3px); 
+            transform: translate(0, 1px) skew(0.3deg);
+          }
+          80% { 
+            filter: blur(0px); 
+            transform: translate(0, -1px) skew(-0.3deg);
+          }
+        }
+
+        @keyframes scanlines {
+          0% {
+            background-position: 0 0;
+          }
+          100% {
+            background-position: 0 10px;
+          }
+        }
+
+        .ldr-glitch-container {
+          position: relative;
+          display: inline-block;
+        }
+
+        .ldr-glitch-container::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.03) 2px,
+            rgba(255, 255, 255, 0.03) 4px
+          );
+          animation: scanlines 8s linear infinite;
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .ldr-char {
+          display: inline-block;
+          position: relative;
+          animation: 
+            glitch-flicker 4s infinite,
+            digital-distortion 8s infinite;
+          animation-delay: calc(var(--char-index) * 0.1s);
+        }
+
+        .ldr-char.scrambling {
+          animation: 
+            rgb-split 0.3s infinite,
+            digital-distortion 0.2s infinite;
+          color: #fff;
+          text-shadow: 
+            0 0 10px rgba(255, 255, 255, 0.5),
+            0 0 20px rgba(255, 255, 255, 0.3),
+            0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .ldr-char.glitch-loop {
+          animation: 
+            glitch-flicker 3s infinite,
+            rgb-split 4s infinite,
+            digital-distortion 6s infinite;
+          animation-delay: calc(var(--char-index) * 0.2s);
+        }
+
+        /* Glow effect behind ARADO */
+        .hero-title-glow {
+          position: relative;
+        }
+
+        .hero-title-glow::before {
+          content: attr(data-text);
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          filter: blur(40px);
+          opacity: 0.15;
+          z-index: -1;
+          pointer-events: none;
+          font-size: inherit;
+          font-weight: inherit;
+          letter-spacing: inherit;
+          white-space: nowrap;
+        }
+
+        /* R flip animation */
+        .r-flipped {
+          transform: rotateY(180deg);
+          transform-style: preserve-3d;
+          transition: transform 0.6s ease-in-out;
+        }
+
+        /* Occasional glitch spike */
+        @keyframes glitch-spike {
+          0%, 100% { 
+            transform: translateX(0);
+            filter: none;
+          }
+          50% {
+            transform: translateX(2px);
+            filter: hue-rotate(90deg) saturate(3);
+          }
+        }
+
+        .ldr-char:nth-child(2n) {
+          animation-name: glitch-flicker, rgb-split, digital-distortion, glitch-spike;
+          animation-duration: 3s, 4s, 6s, 10s;
+          animation-iteration-count: infinite;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+          .ldr-char {
+            animation-duration: 6s, 8s;
+          }
+        }
+      `}</style>
+
       <section 
         id="hero"
         ref={sectionRef}
         className="page-section min-h-screen relative flex flex-col items-center justify-center overflow-hidden"
         style={{
           background: 'linear-gradient(180deg, #050508 0%, #0f1419 100%)',
-          marginBottom: 0, paddingBottom: 0, minHeight: '100vh', padding: '0 2rem'
+          marginBottom: 0, 
+          paddingBottom: 0, 
+          minHeight: '100vh', 
+          padding: '0 2rem'
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-slate-900/5 to-cyan-900/5" />
         <div 
           className="absolute inset-0 opacity-10 pointer-events-none"
-          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
+          style={{ 
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` 
+          }}
         />
         
         <div className="relative z-10 text-center">
-          {/* Angepasste Framer Motion Animation für "ARADO" */}
           <motion.div
-            variants={nameContainerAnimation}
-            initial="hidden"
-            animate={isMounted ? "visible" : "hidden"}
-            className="mb-8" // Beibehaltung des Abstands
-            style={{ perspective: '1000px' }} // Perspektive für 3D-Effekt
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isMounted ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+            className="mb-8"
           >
-            <h1 className="hero-title relative" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-              {nameToAnimate.split('').map((char, index) => (
+            <h1 
+              className="hero-title hero-title-glow ldr-glitch-container" 
+              data-text={targetName}
+              style={{ 
+                display: 'flex', 
+                flexDirection: 'row', 
+                justifyContent: 'center',
+                perspective: '1000px'
+              }}
+            >
+              {displayChars.map((char, index) => (
                 <motion.span
-                  key={`arado-${index}`}
-                  variants={nameLetterAnimation}
-                  className="inline-block relative" 
+                  key={`ldr-${index}`}
+                  className={`ldr-char ${!scrambleComplete ? 'scrambling' : 'glitch-loop'} ${(rFlipped && index === 1) ? 'r-flipped' : ''}`}
                   style={{
-                    // Reine weiße Schrift, kein Farbverlauf mehr
-                    color: '#FFFFFF', 
-                    // WebkitTextFillColor: 'transparent', // Nicht mehr nötig für solid color
-                    // backgroundClip: 'unset',            // Nicht mehr nötig
-                    // background: 'none',                 // Nicht mehr nötig
-                    marginRight: char === ' ' ? '0.1em' : '0', 
-                    textShadow: '0 0 15px rgba(255, 255, 255, 0.2)', // Leichterer Textschatten
-                  }}
+                    '--char-index': index,
+                    color: '#FFFFFF',
+                    textShadow: scrambleComplete 
+                      ? '0 0 15px rgba(255, 255, 255, 0.2)' 
+                      : '0 0 20px rgba(255, 255, 255, 0.6)',
+                    transformStyle: 'preserve-3d',
+                    display: 'inline-block',
+                  } as React.CSSProperties}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.1 }}
                 >
                   {char}
                 </motion.span>
@@ -205,7 +430,7 @@ export default function LandingSection() {
             </h1>
           </motion.div>
 
-          {/* Slogan (Deine bestehende Framer Motion Logik) */}
+          {/* Slogan Animation - unverändert */}
           <div className="mb-12 hero-slogan">
             <motion.div
               custom={true} 
@@ -217,7 +442,22 @@ export default function LandingSection() {
               {sloganPart1Letters.map((char, index) => {
                 const transformIndex = index % letterTransforms.length; 
                 const transforms = letterTransforms[transformIndex];
-                return ( <motion.span key={`s1-${index}`} style={{ display: 'inline-block', opacity: transforms.opacity, x: transforms.x, y: transforms.y, rotate: transforms.rotate, scale: transforms.scale, marginRight: char === ' ' ? '0.3em' : '0', }}>{char === ' ' ? '\u00A0' : char}</motion.span> );
+                return (
+                  <motion.span 
+                    key={`s1-${index}`} 
+                    style={{ 
+                      display: 'inline-block', 
+                      opacity: transforms.opacity, 
+                      x: transforms.x, 
+                      y: transforms.y, 
+                      rotate: transforms.rotate, 
+                      scale: transforms.scale, 
+                      marginRight: char === ' ' ? '0.3em' : '0',
+                    }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                );
               })}
             </motion.div>
             <motion.div
@@ -230,7 +470,22 @@ export default function LandingSection() {
               {sloganPart2Letters.map((char, index) => {
                 const transformIndex = (index + sloganPart1Letters.length) % letterTransforms.length;
                 const transforms = letterTransforms[transformIndex];
-                return ( <motion.span key={`s2-${index}`} style={{ display: 'inline-block', opacity: transforms.opacity, x: transforms.x, y: transforms.y, rotate: transforms.rotate, scale: transforms.scale, marginRight: char === ' ' ? '0.3em' : '0', }}>{char === ' ' ? '\u00A0' : char}</motion.span> );
+                return (
+                  <motion.span 
+                    key={`s2-${index}`} 
+                    style={{ 
+                      display: 'inline-block', 
+                      opacity: transforms.opacity, 
+                      x: transforms.x, 
+                      y: transforms.y, 
+                      rotate: transforms.rotate, 
+                      scale: transforms.scale, 
+                      marginRight: char === ' ' ? '0.3em' : '0',
+                    }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                );
               })}
             </motion.div>
           </div>
@@ -240,12 +495,16 @@ export default function LandingSection() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={isMounted ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 1.5, duration: 1 }} // Delay angepasst an neue Namensanimation
+          transition={{ delay: 3.5, duration: 1 }}
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center scroll-down-indicator"
         >
           <a href="#about-me" className="flex flex-col items-center gap-2 text-white/70 hover:text-red-400 transition-all duration-300 hover:-translate-y-1">
             <div className="scroll-wheel w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2 transition-colors duration-300 hover:border-red-400/70">
-              <motion.div className="scroll-dot w-1 h-2 bg-white/70 rounded-full transition-colors duration-300" animate={{ y: [0, 12, 0], opacity: [1, 0.5, 1]}} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
+              <motion.div 
+                className="scroll-dot w-1 h-2 bg-white/70 rounded-full transition-colors duration-300" 
+                animate={{ y: [0, 12, 0], opacity: [1, 0.5, 1] }} 
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} 
+              />
             </div>
           </a>
         </motion.div>
