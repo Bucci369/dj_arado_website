@@ -20,6 +20,11 @@ export default function LandingSection() {
   // State für scramble characters
   const [displayChars, setDisplayChars] = useState<string[]>(targetName.split(''));
   
+  // Debug state
+  useEffect(() => {
+    console.log('rFlipped state:', rFlipped);
+  }, [rFlipped]);
+  
   // LDR-style scramble effect
   useEffect(() => {
     if (!isMounted) return;
@@ -68,7 +73,10 @@ export default function LandingSection() {
           setTimeout(() => {
             setScrambleComplete(true);
             // Flip R after scramble completes
-            setTimeout(() => setRFlipped(true), 300);
+            setTimeout(() => {
+              console.log('Setting R to flipped!');
+              setRFlipped(true);
+            }, 1000);
           }, 200);
         }
       }, scrambleDuration);
@@ -235,23 +243,23 @@ export default function LandingSection() {
         @keyframes digital-distortion {
           0%, 100% { 
             filter: none; 
-            transform: translate(0, 0) skew(0deg);
+            transform: translateX(0) translateY(0) skew(0deg);
           }
           20% { 
             filter: blur(0.5px); 
-            transform: translate(-1px, 0) skew(0.5deg);
+            transform: translateX(-1px) translateY(0) skew(0.5deg);
           }
           40% { 
             filter: blur(0px); 
-            transform: translate(1px, 0) skew(-0.5deg);
+            transform: translateX(1px) translateY(0) skew(-0.5deg);
           }
           60% { 
             filter: blur(0.3px); 
-            transform: translate(0, 1px) skew(0.3deg);
+            transform: translateX(0) translateY(1px) skew(0.3deg);
           }
           80% { 
             filter: blur(0px); 
-            transform: translate(0, -1px) skew(-0.3deg);
+            transform: translateX(0) translateY(-1px) skew(-0.3deg);
           }
         }
 
@@ -295,6 +303,7 @@ export default function LandingSection() {
             glitch-flicker 4s infinite,
             digital-distortion 8s infinite;
           animation-delay: calc(var(--char-index) * 0.1s);
+          transform-style: preserve-3d;
         }
 
         .ldr-char.scrambling {
@@ -337,11 +346,24 @@ export default function LandingSection() {
           white-space: nowrap;
         }
 
-        /* R flip animation */
-        .r-flipped {
-          transform: rotateY(180deg);
+        /* Separate Klasse für das R ohne störende Animationen */
+        .r-letter {
+          display: inline-block;
+          position: relative;
+          color: #FFFFFF;
           transform-style: preserve-3d;
           transition: transform 0.6s ease-in-out;
+        }
+        
+        .r-letter.flipped {
+          transform: rotateY(180deg);
+        }
+        
+        .r-letter.glitch-loop {
+          animation: 
+            glitch-flicker 3s infinite,
+            rgb-split 4s infinite;
+          animation-delay: 0.2s;
         }
 
         /* Occasional glitch spike */
@@ -407,26 +429,49 @@ export default function LandingSection() {
                 perspective: '1000px'
               }}
             >
-              {displayChars.map((char, index) => (
-                <motion.span
-                  key={`ldr-${index}`}
-                  className={`ldr-char ${!scrambleComplete ? 'scrambling' : 'glitch-loop'} ${(rFlipped && index === 1) ? 'r-flipped' : ''}`}
-                  style={{
-                    '--char-index': index,
-                    color: '#FFFFFF',
-                    textShadow: scrambleComplete 
-                      ? '0 0 15px rgba(255, 255, 255, 0.2)' 
-                      : '0 0 20px rgba(255, 255, 255, 0.6)',
-                    transformStyle: 'preserve-3d',
-                    display: 'inline-block',
-                  } as React.CSSProperties}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.1 }}
-                >
-                  {char}
-                </motion.span>
-              ))}
+              {displayChars.map((char, index) => {
+                const isR = index === 1;
+                
+                // Spezielles Rendering für R
+                if (isR) {
+                  return (
+                    <span
+                      key={`ldr-${index}`}
+                      className={`r-letter ${rFlipped ? 'flipped' : ''} ${scrambleComplete ? 'glitch-loop' : ''}`}
+                      style={{
+                        '--char-index': index,
+                        textShadow: scrambleComplete 
+                          ? '0 0 15px rgba(255, 255, 255, 0.2)' 
+                          : '0 0 20px rgba(255, 255, 255, 0.6)',
+                      } as React.CSSProperties}
+                    >
+                      {char}
+                    </span>
+                  );
+                }
+                
+                // Normales Rendering für andere Buchstaben
+                return (
+                  <motion.span
+                    key={`ldr-${index}`}
+                    className={`ldr-char ${!scrambleComplete ? 'scrambling' : 'glitch-loop'}`}
+                    style={{
+                      '--char-index': index,
+                      color: '#FFFFFF',
+                      textShadow: scrambleComplete 
+                        ? '0 0 15px rgba(255, 255, 255, 0.2)' 
+                        : '0 0 20px rgba(255, 255, 255, 0.6)',
+                      transformStyle: 'preserve-3d',
+                      display: 'inline-block',
+                    } as React.CSSProperties}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ opacity: { duration: 0.1 } }}
+                  >
+                    {char}
+                  </motion.span>
+                );
+              })}
             </h1>
           </motion.div>
 
