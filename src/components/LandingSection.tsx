@@ -1,4 +1,3 @@
-// src/components/LandingSection.tsx
 'use client'
 
 import { motion, useScroll, useTransform } from 'framer-motion'
@@ -34,14 +33,22 @@ export default function LandingSection() {
     
     // Start scrambling each character
     targetName.split('').forEach((targetChar, index) => {
-      const scrambleDuration = 1500 + Math.random() * 1000; // 1.5-2.5s
-      const scrambleSpeed = 50 + Math.random() * 50; // 50-100ms
+      // Ursprüngliche Dauer: 1.5-2.5s. Erhöht, um den Effekt insgesamt zu verlängern.
+      const scrambleDuration = 2000 + Math.random() * 1500; // 2.0-3.5s
       
+      // Ursprüngliche Geschwindigkeit: 50-100ms. Erhöht, um die Intervalle langsamer zu machen.
+      // Die Scramble-Geschwindigkeit wird progressiv verlangsamt.
+      let currentScrambleSpeed = 50 + Math.random() * 50; // Startwert 50-100ms
+      const decayFactor = 0.98; // Verlangsamungsfaktor pro Iteration
+
       let scrambleCount = 0;
-      const maxScrambles = Math.floor(scrambleDuration / scrambleSpeed);
+      const maxScrambles = Math.floor(scrambleDuration / currentScrambleSpeed); // Basierend auf Anfangsgeschwindigkeit
       
       const interval = setInterval(() => {
         scrambleCount++;
+        
+        // Verlangsamung der Scramble-Geschwindigkeit im Laufe der Zeit
+        currentScrambleSpeed /= decayFactor; 
         
         setDisplayChars(prev => {
           const newChars = [...prev];
@@ -55,7 +62,7 @@ export default function LandingSection() {
           }
           return newChars;
         });
-      }, scrambleSpeed);
+      }, currentScrambleSpeed); // Nutze die sich ändernde Geschwindigkeit
       
       scrambleIntervals.push(interval);
       
