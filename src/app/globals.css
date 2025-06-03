@@ -1491,172 +1491,153 @@ body {
 /* ===== GALLERY SECTION ===== */
 .gallery-container {
   max-width: 1200px; /* Max-Breite der Galerie */
-  width: 90%;
-  margin: 2rem auto;
+  width: 90%; /* Oder 100% wenn padding von page-section kommt */
+  margin: 2rem auto; /* Zentrierung und Abstand */
 }
 
 .gallery-grid {
   display: grid;
-  /* Standardmäßig 2 Spalten auf kleineren Bildschirmen (z.B. Handy Hochformat) */
+  /* Standard: responsive Spalten, min. 150px breit */
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
-  /* Auto-Platzierung für unterschiedlich große Elemente */
+  gap: 1rem; /* Etwas kleinerer Gap für Mobile First */
   grid-auto-flow: dense; /* Wichtig für lückenloses Layout */
-  /* Eine Basis-Höhe für Reihen, an die sich die Elemente anpassen (oder span) */
-  grid-auto-rows: 150px; /* **WICHTIG:** Diesen Wert eventuell anpassen! */
-  align-items: stretch; /* Wichtig, damit Items die volle Höhe der Grid-Zelle einnehmen */
+  grid-auto-rows: 150px; /* Basis-Höhe für Reihen */
+  align-items: stretch;
 }
 
 /* Anpassung für mittlere Bildschirme (Tablets, kleine Desktops) */
 @media (min-width: 768px) {
   .gallery-grid {
-    grid-template-columns: repeat(4, 1fr); /* Ein 4-Spalten-Raster auf Tablets */
-    gap: 2rem;
-    grid-auto-rows: 200px; /* Angepasste Basis-Höhe für Reihen auf Tablets */
+    /* Deine ursprünglichen Werte waren 4 Spalten und 200px Reihenhöhe */
+    /* Die custom-gallery-grid hatte repeat(3, 1fr) und 150px Reihen */
+    /* Wähle, was besser passt. Hier ein Kompromiss oder deine Tablet-spezifischen Werte: */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Flexibler */
+    /* Oder fester: grid-template-columns: repeat(4, 1fr); */
+    gap: 1.5rem; /* Etwas größerer Gap */
+    grid-auto-rows: 180px; /* Angepasste Basis-Höhe */
   }
 }
 
 /* Anpassung für größere Bildschirme (Desktops) */
 @media (min-width: 1024px) {
   .gallery-grid {
-    grid-template-columns: repeat(6, 1fr); /* Ein 6-Spalten-Raster für komplexe Layouts auf großen Desktops */
-    gap: 2rem;
-    grid-auto-rows: 180px; /* Angepasste Basis-Höhe für Reihen auf Desktops */
+    /* Deine ursprünglichen Werte waren 6 Spalten und 180px Reihenhöhe */
+    /* Die custom-gallery-grid hatte repeat(auto-fill, minmax(200px, 1fr)) und 180px Reihen */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Flexibler */
+    /* Oder fester: grid-template-columns: repeat(6, 1fr); */
+    gap: 1.5rem; /* Konsistenter Gap */
+    grid-auto-rows: 200px; /* Basis-Höhe für Reihen auf Desktops */
   }
 }
 
-/* Grundlegende Styling für jedes Galerie-Item */
+/* Grundlegendes Styling für jedes Galerie-Item */
 .gallery-item {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05); /* Optional, wenn Bilder den Raum füllen */
+  border-radius: 12px; /* Wichtig für abgerundete Ecken */
+  overflow: hidden; /* Stellt sicher, dass Inhalt (Bild) die Rundung respektiert */
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0; /* Dies wird durch GSAP animiert, initial auf 0 lassen */
-  transform: translateY(50px) scale(0.9); /* Auch GSAP-Initialzustand */
-  will-change: opacity, transform;
-  /* Wichtig: Standard-Seitenverhältnis, das von spezifischen Größen überschrieben wird */
-  aspect-ratio: 1 / 1; /* Standardmäßig quadratisch, wird aber von Klassen überschrieben */
-  height: auto; /* Muss auf auto stehen, wenn aspect-ratio verwendet wird, damit es sich anpasst */
-  min-width: 0; /* Verhindert, dass Grid-Items die Spalte überfließen */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Optionaler Rand */
+  opacity: 1; /* Standardmäßig sichtbar, Animationen ggf. separat */
+  transform: none; /* Standard Transform */
+  will-change: transform; /* Für Hover-Performance */
+  min-width: 0; /* Verhindert Grid-Überlauf */
+
+  /* Standardmäßig spannt jedes Item 1 Zeile und 1 Spalte,
+     außer es wird durch spezifische Klassen überschrieben.
+     aspect-ratio hier kann problematisch sein, wenn grid-auto-rows einen festen Wert hat
+     und die Spans variieren. Besser die Spans steuern lassen. */
+  grid-column: span 1;
+  grid-row: span 1;
 }
 
-/* Hover Effekte, unverändert */
+.gallery-item:focus-visible { /* Bessere Sichtbarkeit des Fokus */
+  outline: 2px solid #40e0d0; /* Beispielhafte Fokus-Farbe */
+  outline-offset: 2px;
+  box-shadow: 0 0 15px rgba(64, 224, 208, 0.5); /* Optionaler Glow-Effekt */
+}
+
+
 .gallery-item:hover {
   transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* === Definition der Größen-Klassen === */
-/* Diese Klassen nutzen grid-column und aspect-ratio um die Größe und Form der Kacheln zu steuern */
-
-/* Kleine Kacheln (Standard) */
+/* Größen-Klassen für Galerie-Items (basierend auf deiner globalen CSS Idee) */
+/* Kleine Kacheln (Standard, falls keine andere Größenklasse angewendet wird) */
 .gallery-item--small {
   grid-column: span 1;
-  aspect-ratio: 1 / 1; /* Quadratisch */
+  grid-row: span 1;
+  /* aspect-ratio: 1 / 1;  Falls benötigt, aber grid-row-span ist oft besser */
 }
 
 /* Mittelgroße Kacheln */
 .gallery-item--medium {
-  grid-column: span 2;
-  aspect-ratio: 4 / 3; /* Leicht breiter als hoch */
+  grid-column: span 2; /* Nimmt 2 Spalten ein */
+  grid-row: span 1;    /* Nimmt 1 Zeile ein (oder span 2 für höher) */
+  /* aspect-ratio: 4 / 3; */
 }
+@media (max-width: 767px) { /* Auf sehr kleinen Schirmen ggf. anpassen */
+  .gallery-item--medium {
+    grid-column: span 1; /* Oder was immer für dein Mobile-Layout passt */
+    grid-row: span 2;    /* Beispiel: höher statt breiter */
+  }
+}
+
 
 /* Große Kacheln */
 .gallery-item--large {
-  grid-column: span 3;
-  aspect-ratio: 16 / 9; /* Breitbild-Format */
+  grid-column: span 2; /* Nimmt 2 Spalten ein */
+  grid-row: span 2;    /* Nimmt 2 Zeilen ein */
+  /* aspect-ratio: 16 / 9; */
+}
+@media (max-width: 767px) { /* Auf sehr kleinen Schirmen ggf. anpassen */
+  .gallery-item--large {
+    grid-column: span 1; /* Oder was immer für dein Mobile-Layout passt */
+    grid-row: span 2;    /* Beispiel: schmaler aber hoch */
+  }
 }
 
-/* Hohe Kacheln (spannt über 2 Reihen) */
+/* Wenn du eine 'tall' Klasse hast: */
 .gallery-item--tall {
-  grid-column: span 1; /* Nimmt nur 1 Spalte ein */
-  grid-row: span 2;   /* Spannt über 2 Reihen */
-  aspect-ratio: 3 / 4; /* Höher als breit */
+  grid-column: span 1;
+  grid-row: span 2;
+  /* aspect-ratio: 3 / 4; */
 }
 
 
-/* === Responsive Anpassungen für die Kachelgrößen ===
-   Hier werden die Spalten-Span-Werte und Seitenverhältnisse angepasst,
-   damit sie im jeweiligen Grid-Layout (4 oder 6 Spalten) Sinn ergeben */
-
-/* Tablets und kleinere Desktops (768px - 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .gallery-item--medium {
-    grid-column: span 2; /* Auf 4-Spalten-Raster nimmt medium 2 Spalten ein */
-    aspect-ratio: 4 / 3;
-  }
-  .gallery-item--large {
-    grid-column: span 4; /* Auf 4-Spalten-Raster nimmt large 4 Spalten ein (volle Breite) */
-    aspect-ratio: 16 / 9;
-  }
-  .gallery-item--tall {
-    grid-column: span 2; /* Auf 4-Spalten-Raster nimmt tall 2 Spalten ein, und 2 Reihen */
-    grid-row: span 2;
-    aspect-ratio: 3 / 4;
-  }
-}
-
-/* Mobile Geräte (max-width: 767px) */
-@media (max-width: 767px) {
-  .gallery-grid {
-    grid-template-columns: 1fr; /* Einspaltiges Layout für Handys */
-    gap: 1rem;
-    grid-auto-rows: minmax(100px, auto); /* Kleinere Basis-Höhe für mobile Reihen */
-  }
-  .gallery-item--small,
-  .gallery-item--medium,
-  .gallery-item--large,
-  .gallery-item--tall {
-    grid-column: span 1; /* Alle Kacheln nehmen 1 Spalte ein */
-    /* Behalten die spezifischen Seitenverhältnisse bei, damit nicht alles gleich aussieht */
-  }
-  .gallery-item--small {
-    aspect-ratio: 1 / 1;
-  }
-  .gallery-item--medium {
-    aspect-ratio: 4 / 3;
-  }
-  .gallery-item--large {
-    aspect-ratio: 16 / 9;
-  }
-  .gallery-item--tall {
-    aspect-ratio: 3 / 4;
-  }
-}
-
-
-/* Der Rest deiner existierenden CSS-Regeln für die Galerie-Items */
-/* Gallery Image Container - muss relative Position und 100% Breite/Höhe haben, damit Next.js Image mit fill funktioniert */
+/* Container für das Next.js Image, damit 'fill' funktioniert */
 .gallery-image {
   position: relative;
-  width: 100%; /* Wichtig für fill */
+  width: 100%;
   height: 100%; /* Wichtig für fill */
-  overflow: hidden;
+  overflow: hidden; /* Stellt sicher, dass das Bild innerhalb der Rundung bleibt */
+  border-radius: इन्헤रिйт; /* Erbt border-radius vom .gallery-item, falls dort gesetzt */
 }
 
-.gallery-img {
-  object-fit: cover;
-  transition: transform 0.5s ease;
+/* Das eigentliche <img> Tag (wird von Next.js <Image> erzeugt) */
+/* .gallery-img wird der className auf <Image> sein, falls du es brauchst */
+.gallery-image img, .gallery-img {
+  /* object-fit und object-position werden per inline-style vom TSX gesetzt */
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.gallery-item:hover .gallery-image img,
 .gallery-item:hover .gallery-img {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
+/* Overlay und Info Styles (können von deinem globalen CSS übernommen werden) */
 .gallery-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.7) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  border-radius: इन्헤रिйт; /* Erbt border-radius */
 }
 
 .gallery-item:hover .gallery-overlay {
@@ -1674,15 +1655,13 @@ body {
   transform: scale(0.8);
   transition: transform 0.3s ease;
 }
-
 .gallery-item:hover .zoom-icon {
   transform: scale(1);
 }
-
 .zoom-icon svg {
   width: 24px;
   height: 24px;
-  color: #000;
+  color: #000; /* Oder deine gewünschte Farbe */
 }
 
 .gallery-info {
@@ -1691,9 +1670,10 @@ body {
   left: 0;
   right: 0;
   padding: 1rem;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: white;
   transform: translateY(100%);
   transition: transform 0.3s ease;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6) 80%); /* Subtilerer Gradient */
 }
 
 .gallery-item:hover .gallery-info {
@@ -1701,75 +1681,100 @@ body {
 }
 
 .gallery-info h3 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif; /* Oder deine bevorzugte Schriftart */
   font-size: 0.9rem;
   font-weight: 600;
   color: #ffffff;
   margin: 0;
+  line-height: 1.3;
 }
 
-/* Gallery Modal */
+
+/* ===== GALLERY MODAL (LIGHTBOX) ===== */
 .gallery-modal {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0; /* top, right, bottom, left = 0 */
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
-  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9); /* Etwas transparenter für Kontext */
+  backdrop-filter: blur(8px); /* Weichzeichner-Effekt für den Hintergrund */
+  z-index: 10000; /* Sehr hoher z-index, um über allem zu liegen */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1rem; /* Kleinerer Padding für mehr Bildfläche auf Mobile */
 }
 
 .modal-content {
   position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  width: 100%;
-  height: 100%;
-  /* aspect-ratio: 16/10; - Nicht mehr fest, da Bilder unterschiedliche Seitenverhältnisse haben können */
+  max-width: 95vw;   /* Erlaube dem Bild, breiter zu sein */
+  max-height: 95vh;  /* Erlaube dem Bild, höher zu sein */
+  width: 100%; /* Füllt den verfügbaren Platz bis max-width/height */
+  height: 100%;/* Füllt den verfügbaren Platz bis max-width/height */
+  display: flex; /* Für Zentrierung des Bildes, falls es kleiner ist als der Container */
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px; /* Optional: Abrundung für den Content-Bereich selbst */
+  overflow: hidden; /* Verhindert, dass das Bild übersteht, falls Rundung hier gesetzt */
 }
 
+/* Die Klasse .modal-image wird dem Next.js <Image> Tag im Modal zugewiesen */
 .modal-image {
-  object-fit: contain; /* Bild wird angepasst, ohne abgeschnitten zu werden */
-  border-radius: 8px;
+  object-fit: contain !important; /* Stellt sicher, dass das ganze Bild sichtbar ist */
+  border-radius: 4px; /* Leichte Abrundung für das Bild selbst */
+  /* width und height werden von 'fill' und dem Eltercontainer .modal-content gesteuert */
 }
 
 .modal-close {
   position: absolute;
-  top: -50px; /* Position außerhalb des Inhalts, angepasst für bessere Sichtbarkeit */
-  right: -50px;
+  top: 10px; /* Näher am Rand, innerhalb des sichtbaren Bereichs */
+  right: 10px;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(30, 30, 30, 0.7); /* Etwas sichtbarer */
   border: none;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-@media (max-width: 767px) {
-  .modal-close {
-    top: 10px; /* Auf kleinen Bildschirmen innerhalb des Viewports platzieren */
-    right: 10px;
-    z-index: 1001; /* Über dem Bild bleiben */
-  }
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 10001; /* Über dem Modal-Inhalt */
 }
 
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.modal-close:focus-visible { /* Deutlicher Fokus für den Schließen-Button */
+  outline: 2px solid #40e0d0;
+  outline-offset: 2px;
 }
 
 .modal-close svg {
-  width: 24px;
-  height: 24px;
-  color: #ffffff;
+  width: 22px; /* Etwas kleiner für den 40px Button */
+  height: 22px;
+  color: #ffffff; /* SVG Farbe */
+}
+
+/* Media Query für größere Bildschirme, falls der Schließen-Button außerhalb sein soll */
+@media (min-width: 768px) {
+  .gallery-modal {
+    padding: 2rem; /* Größerer Padding auf größeren Schirmen */
+  }
+  .modal-close {
+    /* Hier deine Werte für größere Screens, z.B.: */
+    top: -15px;
+    right: -15px;
+    /* Oder weiterhin innerhalb, aber größer:
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    */
+  }
+  /* .modal-close svg { width: 24px; height: 24px; } */
 }
 
 /* ===== RESPONSIVE ===== */
