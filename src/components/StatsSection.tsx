@@ -149,7 +149,7 @@ export default function StatsSection() {
                 data-target-value={25}
                 data-start-value={10}
                 style={{ 
-                  fontSize: '2.2rem', 
+                  fontSize: '1.8rem', 
                   fontWeight: '700', 
                   color: '#FFFFFF !important', 
                   lineHeight: '1',
@@ -294,7 +294,7 @@ export default function StatsSection() {
             data-target-value={34822}
             data-start-value={0}
             style={{ 
-              fontSize: '3.5rem', 
+              fontSize: '2.8rem', 
               fontWeight: '700', 
               color: '#FFFFFF !important', 
               lineHeight: '1',

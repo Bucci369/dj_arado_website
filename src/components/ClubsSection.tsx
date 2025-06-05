@@ -30,7 +30,7 @@ export default function ClubsSection() {
             <li 
               key={index}
               className="zoom-list-item text-white py-4 mb-4 opacity-1 transform scale-100 will-change-[opacity,transform] cursor-pointer hover:text-cyan-200 transition-colors duration-300"
-              style={{ fontSize: '1.8rem', fontWeight: '600' }}
+              style={{ fontSize: '2.2rem', fontWeight: '600' }}
               // opacity, transform und will-change werden von GSAP in gsap-animations.js gesteuert
             >
               {venue}
