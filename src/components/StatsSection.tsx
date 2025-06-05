@@ -12,18 +12,6 @@ if (typeof window !== 'undefined') {
 export default function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null)
 
-  const stats = [
-    { number: 25, label: "Years in Business", startValue: 10 },
-    { number: 192, label: "Clubs Played", startValue: 0 },
-    { number: 12, label: "Awards", startValue: 0 },
-    { number: 492, label: "Releases", startValue: 0 }
-  ]
-
-  const spotifyStats = {
-    number: 34822, // Beispielwert, kann dynamisch sein
-    label: "Spotify Plays",
-    startValue: 0
-  }
 
   useEffect(() => {
     const section = sectionRef.current

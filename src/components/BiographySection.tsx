@@ -125,7 +125,7 @@ export default function BiographySection() {
       const size = defaults.minSize + Math.random() * (defaults.maxSize - defaults.minSize)
       
       // CSS-Props, die nicht von der globalen .particle-Klasse abgedeckt werden
-      let cssProps = `
+      const cssProps = `
         width: ${size}px; 
         height: ${size}px; 
         left: ${Math.random() * 100}%; 
@@ -195,13 +195,13 @@ export default function BiographySection() {
         
         <div className="bio-text">
           <EnhancedTextReveal className="bio-paragraph" direction="up" stagger={0.02} duration={1}>
-            From Desolat and Remote Area to Moon Harbour via Düsseldorf – in short, that's how Arado's story is best summed up. With the spotlight getting brighter for this talented German export, he's already accrued a world-wide scroll of premium parties at Cocoon and Watergate Germany, Tenax in Italy, Café D'Anvers in Belgium, WMC in Miami, and a legendary closing finale last season at Space in Ibiza.
+            From Desolat and Remote Area to Moon Harbour via Düsseldorf – in short, that&apos;s how Arado&apos;s story is best summed up. With the spotlight getting brighter for this talented German export, he&apos;s already accrued a world-wide scroll of premium parties at Cocoon and Watergate Germany, Tenax in Italy, Café D&apos;Anvers in Belgium, WMC in Miami, and a legendary closing finale last season at Space in Ibiza.
           </EnhancedTextReveal>
           <EnhancedTextReveal className="bio-paragraph" direction="up" stagger={0.02} duration={1} delay={0.2}>
-            Arado is genuine proof that almost everything is possible with the right amount of dedication and perseverance. As an undeniably talented producer - his "Uganda Express" release, signed by Loco Dice for his Desolat label, kick-started his career to international status.
+            Arado is genuine proof that almost everything is possible with the right amount of dedication and perseverance. As an undeniably talented producer - his &quot;Uganda Express&quot; release, signed by Loco Dice for his Desolat label, kick-started his career to international status.
           </EnhancedTextReveal>
           <EnhancedTextReveal className="bio-paragraph" direction="up" stagger={0.02} duration={1} delay={0.4}>
-            Following this acclaimed release came other outstanding productions on labels such as All Inn and Dame Music, which ultimately led to an EP on Matthias Tanzmann's Moon Harbour label that even took him aboard their booking squad.
+            Following this acclaimed release came other outstanding productions on labels such as All Inn and Dame Music, which ultimately led to an EP on Matthias Tanzmann&apos;s Moon Harbour label that even took him aboard their booking squad.
           </EnhancedTextReveal>
           <EnhancedTextReveal className="bio-paragraph" direction="up" stagger={0.02} duration={1} delay={0.6}>
             Whether in the beginning in partnership with Den Ishu or nowadays in collaboration with Italian Marco Faraone, Arada simply knows a thing or two about rocking the Deep & Tech House Floors worldwide. His raw, driving grooves with a Chicago edge enjoy the support of the international DJ elite, and are responsible for propelling him to the top of the rankings as an electronic music artist.

@@ -37,7 +37,7 @@ export default function EnhancedTextReveal({
     const text = container.textContent || ''
     container.innerHTML = ''
     
-    const words = text.split(' ').map((word, index) => {
+    const words = text.split(' ').map((word) => {
       const span = document.createElement('span')
       span.textContent = word
       span.style.display = 'inline-block'

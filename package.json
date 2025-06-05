@@ -33,5 +33,17 @@
     "eslint-config-next": "15.3.3",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "leva": {
+      "@radix-ui/react-portal": {
+        "react": "$react",
+        "react-dom": "$react-dom"
+      },
+      "@radix-ui/react-tooltip": {
+        "react": "$react",
+        "react-dom": "$react-dom"
+      }
+    }
   }
 }
