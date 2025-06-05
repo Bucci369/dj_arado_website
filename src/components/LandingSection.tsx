@@ -11,62 +11,47 @@ export default function LandingSection() {
   
   const targetName = "ARADO";
   
-  // Character pool für LDR-style scramble
   const glitchChars = ['@', '#', '$', '%', '&', '*', '/', '\\', '|', '?', '!', '~', '^', '¿', '¡', '§', '±', '∞', '∑', '∂', '∆', '∏', '√', '∫', '≈', '≠', '≤', '≥', '◊', '◆', '●', '○', '□', '■', '△', '▽', '◉', '◎', '◐', '◑'];
   const alphaChars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
   const allChars = [...glitchChars, ...alphaChars];
   
-  // State für scramble characters
   const [displayChars, setDisplayChars] = useState<string[]>(targetName.split(''));
   
-  // Debug state
   useEffect(() => {
-    console.log('rFlipped state:', rFlipped);
+    // console.log('rFlipped state:', rFlipped);
   }, [rFlipped]);
   
-  // LDR-style scramble effect
   useEffect(() => {
     if (!isMounted) return;
     
     const scrambleIntervals: NodeJS.Timeout[] = [];
     const finalTimeouts: NodeJS.Timeout[] = [];
     
-    // Start scrambling each character
     targetName.split('').forEach((targetChar, index) => {
-      // Ursprüngliche Dauer: 1.5-2.5s. Erhöht, um den Effekt insgesamt zu verlängern.
-      const scrambleDuration = 2000 + Math.random() * 1500; // 2.0-3.5s
-      
-      // Ursprüngliche Geschwindigkeit: 50-100ms. Erhöht, um die Intervalle langsamer zu machen.
-      // Die Scramble-Geschwindigkeit wird progressiv verlangsamt.
-      let currentScrambleSpeed = 50 + Math.random() * 50; // Startwert 50-100ms
-      const decayFactor = 0.98; // Verlangsamungsfaktor pro Iteration
+      const scrambleDuration = 2000 + Math.random() * 1500; 
+      let currentScrambleSpeed = 50 + Math.random() * 50; 
+      const decayFactor = 0.98; 
 
       let scrambleCount = 0;
-      const maxScrambles = Math.floor(scrambleDuration / currentScrambleSpeed); // Basierend auf Anfangsgeschwindigkeit
+      const maxScrambles = Math.floor(scrambleDuration / currentScrambleSpeed); 
       
       const interval = setInterval(() => {
         scrambleCount++;
-        
-        // Verlangsamung der Scramble-Geschwindigkeit im Laufe der Zeit
         currentScrambleSpeed /= decayFactor; 
         
         setDisplayChars(prev => {
           const newChars = [...prev];
-          // Mix of glitch and alpha characters
           if (scrambleCount < maxScrambles * 0.7) {
-            // More glitchy at the beginning
             newChars[index] = allChars[Math.floor(Math.random() * allChars.length)];
           } else {
-            // More alphabetic towards the end
             newChars[index] = alphaChars[Math.floor(Math.random() * alphaChars.length)];
           }
           return newChars;
         });
-      }, currentScrambleSpeed); // Nutze die sich ändernde Geschwindigkeit
+      }, currentScrambleSpeed); 
       
       scrambleIntervals.push(interval);
       
-      // Stop scrambling and set final character
       const timeout = setTimeout(() => {
         clearInterval(interval);
         setDisplayChars(prev => {
@@ -75,13 +60,11 @@ export default function LandingSection() {
           return newChars;
         });
         
-        // Check if all characters are complete
         if (index === targetName.length - 1) {
           setTimeout(() => {
             setScrambleComplete(true);
-            // Flip R after scramble completes
             setTimeout(() => {
-              console.log('Setting R to flipped!');
+              // console.log('Setting R to flipped!');
               setRFlipped(true);
             }, 1000);
           }, 200);
@@ -101,7 +84,6 @@ export default function LandingSection() {
     setIsMounted(true);
   }, []);
 
-  // Scroll-basierte Animationen für Slogan
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"] 
@@ -117,7 +99,6 @@ export default function LandingSection() {
   const sloganPart1Letters = sloganTextPart1.split('');
   const sloganPart2Letters = sloganTextPart2.split('');
   
-  // Letter transforms für Slogan scroll effect
   const letter0Transform = {
     opacity: useTransform(scrollYProgress, [0.1, 0.6], [1, 0]),
     x: useTransform(scrollYProgress, [0.1, 0.6], [0, -120]),
@@ -196,7 +177,7 @@ export default function LandingSection() {
     scale: useTransform(scrollYProgress, [0.3, 1.0], [1, 0])
   };
 
-  const letterTransforms = [
+  const letterTransforms =  [
     letter0Transform, letter1Transform, letter2Transform, letter3Transform,
     letter4Transform, letter5Transform, letter6Transform, letter7Transform, 
     letter8Transform, letter9Transform, letter10Transform,
@@ -227,8 +208,8 @@ export default function LandingSection() {
           }
           20% {
             text-shadow: 
-              -2px 0 #ff0080,
-              2px 0 #00ffff;
+              -2px 0 #ff0080, /* var(--color-primary) wäre konsistenter */
+              2px 0 #00ffff; /* var(--color-secondary) wäre konsistenter */
           }
           40% {
             text-shadow: 
@@ -300,7 +281,7 @@ export default function LandingSection() {
           );
           animation: scanlines 8s linear infinite;
           pointer-events: none;
-          z-index: 1;
+          z-index: 1; /* Über dem hero-title-glow, aber unter dem Text */
         }
 
         .ldr-char {
@@ -314,14 +295,16 @@ export default function LandingSection() {
         }
 
         .ldr-char.scrambling {
+          /* Diese Stile werden in globals.css unter .ldr-char.scrambling definiert und sind spezifischer.
+             Daher werden die Farbvariablen dort verwendet.
           animation: 
-            rgb-split 0.3s infinite,
-            digital-distortion 0.2s infinite;
+            rgb-split 0.3s infinite, 
+            digital-distortion 0.2s infinite; 
           color: #fff;
           text-shadow: 
             0 0 10px rgba(255, 255, 255, 0.5),
             0 0 20px rgba(255, 255, 255, 0.3),
-            0 0 30px rgba(255, 255, 255, 0.1);
+            0 0 30px rgba(255, 255, 255, 0.1); */
         }
 
         .ldr-char.glitch-loop {
@@ -335,6 +318,7 @@ export default function LandingSection() {
         /* Glow effect behind ARADO */
         .hero-title-glow {
           position: relative;
+          z-index: 0; /* Stellt sicher, dass ::before dahinter ist */
         }
 
         .hero-title-glow::before {
@@ -345,19 +329,19 @@ export default function LandingSection() {
           transform: translate(-50%, -50%);
           filter: blur(40px);
           opacity: 0.15;
-          z-index: -1;
+          z-index: -1; /* Hinter dem eigentlichen Text */
           pointer-events: none;
           font-size: inherit;
           font-weight: inherit;
           letter-spacing: inherit;
           white-space: nowrap;
+          color: var(--text-primary); /* Stellt sicher, dass der Glow die richtige Farbe hat */
         }
 
-        /* Separate Klasse für das R ohne störende Animationen */
         .r-letter {
           display: inline-block;
           position: relative;
-          color: #FFFFFF;
+          color: #FFFFFF; /* var(--text-primary) */
           transform-style: preserve-3d;
           transition: transform 0.6s ease-in-out;
         }
@@ -370,10 +354,9 @@ export default function LandingSection() {
           animation: 
             glitch-flicker 3s infinite,
             rgb-split 4s infinite;
-          animation-delay: 0.2s;
+          animation-delay: 0.2s; /* Fester Wert, da es nur ein R gibt */
         }
 
-        /* Occasional glitch spike */
         @keyframes glitch-spike {
           0%, 100% { 
             transform: translateX(0);
@@ -387,14 +370,17 @@ export default function LandingSection() {
 
         .ldr-char:nth-child(2n) {
           animation-name: glitch-flicker, rgb-split, digital-distortion, glitch-spike;
-          animation-duration: 3s, 4s, 6s, 10s;
+          animation-duration: 3s, 4s, 6s, 10s; /* Standardwerte */
           animation-iteration-count: infinite;
         }
 
-        /* Mobile optimizations */
         @media (max-width: 768px) {
-          .ldr-char {
-            animation-duration: 6s, 8s;
+          .ldr-char, .r-letter.glitch-loop { /* r-letter auch anpassen */
+            animation-duration: 6s, 8s, 10s, 12s; /* Längere Durations für Mobile */
+          }
+          .hero-title-glow::before {
+            filter: blur(20px); /* Weniger intensiver Glow auf Mobile */
+            opacity: 0.2;
           }
         }
       `}</style>
@@ -403,15 +389,11 @@ export default function LandingSection() {
         id="hero"
         ref={sectionRef}
         className="page-section min-h-screen relative flex flex-col items-center justify-center overflow-hidden"
-        style={{
-          background: 'linear-gradient(180deg, #050508 0%, #0f1419 100%)',
-          marginBottom: 0, 
-          paddingBottom: 0, 
-          minHeight: '100vh', 
-          padding: '0 2rem'
-        }}
+        // style={{ background: 'linear-gradient(180deg, #050508 0%, #0f1419 100%)' }} // Entfernt, wird von globals.css (#hero) und ScrollBackground.tsx gesteuert
+        style={{ marginBottom: 0, paddingBottom: 0, minHeight: '100vh', padding: '0 2rem' }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-slate-900/5 to-cyan-900/5" />
+        {/* Dekorative Overlays können hier bleiben, wenn sie über dem ScrollBackground liegen sollen */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/10 via-slate-900/5 to-cyan-900/5 opacity-50 pointer-events-none" /> 
         <div 
           className="absolute inset-0 opacity-10 pointer-events-none"
           style={{ 
@@ -419,7 +401,7 @@ export default function LandingSection() {
           }}
         />
         
-        <div className="relative z-10 text-center">
+        <div className="relative z-10 text-center"> {/* z-index erhöht, um sicherzustellen, dass der Inhalt über den Wellen liegt */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: isMounted ? 1 : 0 }}
@@ -428,28 +410,25 @@ export default function LandingSection() {
           >
             <h1 
               className="hero-title hero-title-glow ldr-glitch-container" 
-              data-text={targetName}
+              data-text={targetName} // Für ::before Glow
               style={{ 
                 display: 'flex', 
                 flexDirection: 'row', 
                 justifyContent: 'center',
-                perspective: '1000px'
+                perspective: '1000px' // Für 3D-Effekte der Buchstaben
               }}
             >
               {displayChars.map((char, index) => {
-                const isR = index === 1;
+                const isR = index === 1; // Annahme: R ist der zweite Buchstabe
                 
-                // Spezielles Rendering für R
                 if (isR) {
                   return (
                     <span
                       key={`ldr-${index}`}
                       className={`r-letter ${rFlipped ? 'flipped' : ''} ${scrambleComplete ? 'glitch-loop' : ''}`}
                       style={{
-                        '--char-index': index,
-                        textShadow: scrambleComplete 
-                          ? '0 0 15px rgba(255, 255, 255, 0.2)' 
-                          : '0 0 20px rgba(255, 255, 255, 0.6)',
+                        '--char-index': index, // Für animation-delay in .glitch-loop
+                        // textShadow wird durch .glitch-loop und globals.css .ldr-char.scrambling gesteuert
                       } as React.CSSProperties}
                     >
                       {char}
@@ -457,23 +436,20 @@ export default function LandingSection() {
                   );
                 }
                 
-                // Normales Rendering für andere Buchstaben
                 return (
                   <motion.span
                     key={`ldr-${index}`}
                     className={`ldr-char ${!scrambleComplete ? 'scrambling' : 'glitch-loop'}`}
                     style={{
                       '--char-index': index,
-                      color: '#FFFFFF',
-                      textShadow: scrambleComplete 
-                        ? '0 0 15px rgba(255, 255, 255, 0.2)' 
-                        : '0 0 20px rgba(255, 255, 255, 0.6)',
+                      // color: '#FFFFFF', // Wird von .ldr-char.scrambling in globals.css gesteuert
+                      // textShadow: ..., // Wird von .ldr-char.scrambling in globals.css gesteuert
                       transformStyle: 'preserve-3d',
                       display: 'inline-block',
                     } as React.CSSProperties}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ opacity: { duration: 0.1 } }}
+                    transition={{ opacity: { duration: 0.1 } }} // Sehr kurze Fade-In für jeden Buchstaben beim Scramblen
                   >
                     {char}
                   </motion.span>
@@ -482,14 +458,13 @@ export default function LandingSection() {
             </h1>
           </motion.div>
 
-          {/* Slogan Animation - unverändert */}
           <div className="mb-12 hero-slogan">
             <motion.div
               custom={true} 
               variants={sloganPartContainerAnimation}
               initial="hidden"
               animate={isMounted ? "visible" : "hidden"}
-              className="block text-gray-300"
+              className="block text-gray-300" // var(--text-secondary) wäre konsistenter
             >
               {sloganPart1Letters.map((char, index) => {
                 const transformIndex = index % letterTransforms.length; 
@@ -517,7 +492,7 @@ export default function LandingSection() {
               variants={sloganPartContainerAnimation}
               initial="hidden"
               animate={isMounted ? "visible" : "hidden"}
-              className="block text-white font-medium"
+              className="block text-white font-medium" // var(--text-primary) wäre konsistenter
             >
               {sloganPart2Letters.map((char, index) => {
                 const transformIndex = (index + sloganPart1Letters.length) % letterTransforms.length;
@@ -542,16 +517,17 @@ export default function LandingSection() {
             </motion.div>
           </div>
         </div>
+        
 
-        {/* Scroll Down Indikator */}
+
         <motion.div
           initial={{ opacity: 0 }}
-          animate={isMounted ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 3.5, duration: 1 }}
+          animate={isMounted ? { opacity: 1 } : { opacity: 0 }} // GSAP steuert dies bereits in gsap-animations.js
+          transition={{ delay: 3.5, duration: 1 }} // Kann bleiben oder von GSAP gesteuert werden
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center scroll-down-indicator"
         >
-          <a href="#about-me" className="flex flex-col items-center gap-2 text-white/70 hover:text-red-400 transition-all duration-300 hover:-translate-y-1">
-            <div className="scroll-wheel w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2 transition-colors duration-300 hover:border-red-400/70">
+          <a href="#about-me" className="flex flex-col items-center gap-2 text-white/70 hover:text-red-400 transition-all duration-300 hover:-translate-y-1"> {/* text-red-400 -> var(--color-primary) */}
+            <div className="scroll-wheel w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2 transition-colors duration-300 hover:border-red-400/70"> {/* var(--color-primary) */}
               <motion.div 
                 className="scroll-dot w-1 h-2 bg-white/70 rounded-full transition-colors duration-300" 
                 animate={{ y: [0, 12, 0], opacity: [1, 0.5, 1] }} 

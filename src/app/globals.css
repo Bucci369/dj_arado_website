@@ -5,6 +5,329 @@
   box-sizing: border-box;
 }
 
+/* ===== FARB-VARIABLEN FÜR BESSEREN KONTRAST ===== */
+:root {
+  /* Satte Hauptfarben */
+  --color-primary: #FF0057;      /* Knalliges Pink/Rot */
+  --color-secondary: #00D4FF;    /* Lebendiges Cyan */
+  --color-accent: #7B61FF;       /* Elektrisches Lila */
+  
+  /* Hintergründe mit mehr Tiefe */
+  --bg-black: #000000;           /* Reines Schwarz */
+  --bg-dark: #0A0A0A;           /* Fast Schwarz mit Tiefe */
+  --bg-darker: #050505;         /* Ultra-dunkel */
+  
+  /* Text mit besserem Kontrast */
+  --text-primary: #FFFFFF;       /* Reines Weiß */
+  --text-secondary: #E0E0E0;     /* Helles Grau */
+  --text-muted: #A0A0A0;        /* Gedämpftes Grau */
+  
+  /* Glow & Effekte */
+  --glow-primary: 0 0 80px rgba(255, 0, 87, 0.8);
+  --glow-secondary: 0 0 80px rgba(0, 212, 255, 0.8);
+  --glow-text: 0 0 40px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== GLOBALE VERBESSERUNGEN ===== */
+body {
+  background: var(--bg-black) !important; /* Fallback, falls ScrollBackground nicht lädt */
+  color: var(--text-primary) !important;
+  
+  /* Bessere Schrift-Rendering für knackigen Text */
+  -webkit-font-smoothing: antialiased; /* Geändert von subpixel-antialiased */
+  -moz-osx-font-smoothing: grayscale; /* Beibehalten für Schärfe auf macOS */
+  text-rendering: optimizeLegibility;
+  
+  /* Erhöhter Kontrast global */
+  filter: contrast(1.1) saturate(1.2);
+  
+  /* Performance Optimierungen */
+  contain: layout style paint;
+  will-change: auto;
+}
+
+/* ===== HERO SECTION - SATTE FARBEN ===== */
+#hero {
+  /* Basis-Farbverlauf wird nun von ScrollBackground.tsx gesteuert.
+     Nur die überlagernden radialen Effekte bleiben hier. */
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255, 0, 87, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(0, 212, 255, 0.15) 0%, transparent 50%);
+    /* linear-gradient(180deg, var(--bg-black) 0%, var(--bg-dark) 100%) !important; entfernt */
+}
+
+.hero-title {
+  color: var(--text-primary) !important;
+  text-shadow: 
+    var(--glow-text),
+    0 0 120px rgba(255, 255, 255, 0.3),
+    0 4px 20px rgba(0, 0, 0, 0.8) !important;
+  
+  /* Stärkerer Mix-Blend-Mode für lebendige Effekte */
+  mix-blend-mode: screen;
+}
+
+/* LDR Glitch mit satteren Farben */
+.ldr-char.scrambling {
+  color: var(--text-primary) !important;
+  text-shadow: 
+    -3px 0 var(--color-primary),
+    3px 0 var(--color-secondary),
+    0 0 30px rgba(255, 255, 255, 0.8),
+    0 0 60px rgba(255, 0, 87, 0.6),
+    0 0 90px rgba(0, 212, 255, 0.4) !important;
+}
+
+/* ===== ABOUT SECTION - TIEFERE FARBEN ===== */
+#about-me {
+  /* Basis-Farbverlauf wird nun von ScrollBackground.tsx gesteuert.
+     Nur die überlagernden radialen Effekte bleiben hier. */
+  background: 
+    radial-gradient(ellipse at top left, rgba(123, 97, 255, 0.1) 0%, transparent 40%),
+    radial-gradient(ellipse at bottom right, rgba(255, 0, 87, 0.1) 0%, transparent 40%);
+    /* linear-gradient(to bottom, var(--bg-dark) 0%, #0F0F1A 100%) !important; entfernt */
+}
+
+.bio-image {
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 30px rgba(255, 255, 255, 0.05) !important;
+}
+
+.bio-paragraph {
+  color: var(--text-secondary) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== SECTION TITLES - KNALLIGE AKZENTE ===== */
+.section-title {
+  color: #FFFFFF !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background-clip: unset !important;
+  text-shadow: none !important;
+  position: relative;
+}
+
+.section-title::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background: none;
+  -webkit-text-fill-color: var(--text-primary);
+  text-shadow: var(--glow-text);
+  filter: blur(30px);
+  opacity: 0.5;
+}
+
+.title-underline {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)) !important;
+  height: 4px !important;
+  box-shadow: 
+    0 0 20px rgba(255, 0, 87, 0.8),
+    0 0 40px rgba(0, 212, 255, 0.6) !important;
+}
+
+/* ===== PARTICLES - LEUCHTENDER ===== */
+.particle {
+  background: var(--color-secondary) !important;
+  box-shadow: 
+    0 0 20px var(--color-secondary),
+    0 0 40px rgba(0, 212, 255, 0.6),
+    0 0 60px rgba(0, 212, 255, 0.3) !important;
+  filter: brightness(1.5);
+}
+
+/* ===== BUTTONS & INTERACTIVE - NEON STYLE ===== */
+.magnetic-button,
+.submit-button,
+.cta-badge {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 2px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px) saturate(1.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-button {
+  width: 100% !important;
+  padding: 1rem 2rem !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.magnetic-button::before,
+.submit-button::before,
+.cta-badge::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, var(--color-primary), var(--color-secondary), var(--color-accent));
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  filter: blur(10px);
+}
+
+.magnetic-button:hover::before,
+.submit-button:hover::before,
+.cta-badge:hover::before {
+  opacity: 0.7;
+}
+
+.magnetic-button:hover,
+.submit-button:hover,
+.cta-badge:hover {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 10px 40px rgba(255, 0, 87, 0.3),
+    0 20px 60px rgba(0, 212, 255, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ===== GLASSMORPHISM CARDS - MEHR TIEFE ===== */
+.glassmorphism-card {
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(40px) saturate(1.8) contrast(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ===== STATS - SCHARFE WEISSE ZAHLEN ===== */
+.stat-number {
+  color: #FFFFFF !important;
+  text-shadow: none !important;
+  filter: none !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background-clip: unset !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  font-smooth: always !important;
+  -webkit-text-stroke: 0.01em transparent !important;
+}
+
+/* ===== SPOTIFY PLAYERS - LEBENDIGER ===== */
+.spotify-player {
+  background: radial-gradient(circle at center, #1A1A1A 0%, #000000 100%) !important;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(30, 215, 96, 0.2),
+    inset 0 0 20px rgba(0, 0, 0, 0.5) !important;
+  width: 180px !important;
+  height: 180px !important;
+  border-radius: 12px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.spotify-player.is-playing {
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.6),
+    0 0 120px rgba(30, 215, 96, 0.5),
+    0 0 180px rgba(30, 215, 96, 0.3),
+    inset 0 0 30px rgba(30, 215, 96, 0.2) !important;
+}
+
+.wave-ring {
+  border-color: var(--color-primary) !important;
+  box-shadow: 
+    0 0 40px var(--color-primary),
+    inset 0 0 20px var(--color-primary) !important;
+}
+
+/* ===== GALLERY - DRAMATIC LIGHTING ===== */
+.gallery-item {
+  background: var(--bg-darker) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-item:hover {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.8),
+    0 0 100px rgba(255, 0, 87, 0.2),
+    inset 0 0 30px rgba(255, 255, 255, 0.05) !important;
+}
+
+.gallery-overlay {
+  background: linear-gradient(
+    to bottom, 
+    transparent 0%, 
+    rgba(0, 0, 0, 0.4) 30%, 
+    rgba(0, 0, 0, 0.9) 100%
+  ) !important;
+}
+
+/* ===== FORM INPUTS - NEON FOCUS ===== */
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--color-primary) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 
+    0 0 0 2px rgba(255, 0, 87, 0.2),
+    0 0 30px rgba(255, 0, 87, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ===== SCROLLBAR - CUSTOM STYLING ===== */
+::-webkit-scrollbar {
+  width: 12px;
+  background: var(--bg-black);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 6px;
+  border: 2px solid var(--bg-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== PERFORMANCE OPTIMIERUNGEN ===== */
+/* Reduziere Blur und Schatten auf Mobile */
+@media (max-width: 768px) {
+  body {
+    filter: contrast(1.05) saturate(1.1);
+  }
+  
+  .glassmorphism-card {
+    backdrop-filter: blur(20px) saturate(1.5);
+  }
+  
+  .hero-title {
+    text-shadow: 
+      0 0 20px rgba(255, 255, 255, 0.3),
+      0 2px 10px rgba(0, 0, 0, 0.8) !important;
+  }
+  
+  .particle {
+    box-shadow: 0 0 10px var(--color-secondary) !important;
+  }
+}
+
 html {
   font-size: 16px;
   text-size-adjust: 100%;
@@ -13,12 +336,12 @@ html {
 
 body {
   font-family: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #000000 !important; /* Komplett schwarz */
+  /* background: #000000 !important; /* Wird von ScrollBackground oder spezifischen Sektionen gesteuert */
   color: #ffffff !important; /* Alle Texte weiß */
   overflow-x: hidden;
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* -webkit-font-smoothing: antialiased; /* Bereits oben globaler gesetzt */
+  /* -moz-osx-font-smoothing: grayscale; /* Bereits oben globaler gesetzt */
   will-change: scroll-position;
 }
 
@@ -30,7 +353,7 @@ body {
   font-family: var(--font-poppins), 'Poppins', sans-serif !important;
   letter-spacing: 0.08em !important; /* Etwas mehr Abstand */
   text-transform: uppercase !important;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1) !important; /* Weicher Glow */
+  /* text-shadow: 0 0 20px rgba(255, 255, 255, 0.1) !important; /* Weicher Glow - wird von spezifischer .hero-title Regel oben überschrieben */
 }
 
 /* ===== BIO IMAGE 3D EFFECTS ===== */
@@ -53,9 +376,9 @@ body {
   position: relative;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08);
-  opacity: 0;
-  transform: translateY(50px) rotateX(10deg) scale(0.95);
+  /* box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08); /* Wird von spezifischer .bio-image Regel oben überschrieben */
+  opacity: 0; /* Für GSAP Animation */
+  transform: translateY(50px) rotateX(10deg) scale(0.95); /* Für GSAP Animation */
   will-change: transform, opacity;
 }
 
@@ -103,7 +426,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  /* background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%); /* Wird von spezifischer Regel oben überschrieben */
   transform: translateX(-100%);
   transition: transform 0.6s ease;
   pointer-events: none;
@@ -111,6 +434,7 @@ body {
 
 .magnetic-button:hover::before {
   transform: translateX(100%);
+  /* opacity: 0.7; /* Wird von spezifischer Regel oben überschrieben */
 }
 
 /* ===== TEXT REVEAL ANIMATIONS ===== */
@@ -140,7 +464,7 @@ body {
   will-change: transform, opacity, filter;
   transform-style: preserve-3d;
   backface-visibility: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease; /* Kombiniert mit GSAP Animation */
 }
 
 .zoom-list-item:hover {
@@ -152,8 +476,8 @@ body {
 .glassmorphism-card {
   position: relative;
   overflow: hidden;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Wird von spezifischer Regel oben überschrieben, falls vorhanden */
+  backdrop-filter: blur(12px); /* Wird von spezifischer Regel oben überschrieben, falls vorhanden */
   background-clip: padding-box;
 }
 
@@ -204,10 +528,10 @@ body {
 
 .glassmorphism-card:hover {
   transform: translateY(-2px);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.15),
+  /* box-shadow: /* Wird von spezifischer Regel oben überschrieben */
+    /*0 12px 40px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(255, 255, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.15); */
 }
 
 .hero-slogan {
@@ -248,8 +572,8 @@ body {
 
 /* ===== PAGE SECTIONS ===== */
 .page-section {
-  min-height: 110vh; /* Slightly increased for more space but not too much */
-  padding: 3rem 2rem; /* Moderate padding for spacing */
+  min-height: 120vh; /* Mehr Höhe für bessere Proportionen */
+  padding: 4rem 2rem; /* Mehr Padding */
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -258,7 +582,7 @@ body {
   text-align: center;
   position: relative;
   overflow: hidden;
-  background-color: transparent;
+  background-color: transparent; /* WICHTIG: Damit ScrollBackground sichtbar ist */
   border: none;
 }
 
@@ -278,76 +602,6 @@ body {
   border: none !important;
 }
 
-/* ===== HERO BACKGROUND EDGE WAVES ===== */
-.hero-edge-wave-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.hero-edge-wave {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  transform-origin: center center;
-  opacity: 0;
-  background: radial-gradient(circle at center,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0) 25%,
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 255, 255, 0.15) 60%,
-    rgba(255, 255, 255, 0.25) 80%
-  );
-  animation: heroEdgeWavePulse 8s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-.hero-edge-wave:nth-child(1) {
-  animation-delay: 0s;
-  transform: translate(-50%, -50%) scale(1.5);
-}
-
-.hero-edge-wave:nth-child(2) {
-  animation-delay: -2.5s;
-  transform: translate(-50%, -50%) scale(1.8);
-  background: radial-gradient(circle at center,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0) 30%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.18) 70%,
-    rgba(255, 255, 255, 0.3) 85%
-  );
-}
-
-.hero-edge-wave:nth-child(3) {
-  animation-delay: -5s;
-  transform: translate(-50%, -50%) scale(2.1);
-  background: radial-gradient(circle at center,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0) 35%,
-    rgba(255, 255, 255, 0.06) 55%,
-    rgba(255, 255, 255, 0.12) 75%,
-    rgba(255, 255, 255, 0.2) 90%
-  );
-}
-
-@keyframes heroEdgeWavePulse {
-  0%, 100% {
-    opacity: 0.1;
-    transform: translate(-50%, -50%) scale(1.5);
-  }
-  50% {
-    opacity: 0.6;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
 
 /* ===== SECTION HEADERS ===== */
 .section-header {
@@ -365,31 +619,32 @@ body {
   line-height: 1;
   margin-bottom: 0.8rem;
   position: relative;
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .title-line {
   display: block;
-  opacity: 0;
-  transform: translateY(50px) rotateX(45deg);
+  opacity: 1 !important;
+  transform: none !important;
   will-change: transform, opacity;
+  color: #FFFFFF !important;
 }
 
 .title-underline {
   width: 50%;
   height: 3px;
-  background: linear-gradient(90deg, #ff4757, #40e0d0) !important; /* About Me Farben für alle */
+  background: #ffffff !important;
   margin: 0;
   margin-left: 0; /* Startet beim ersten Buchstaben links */
-  opacity: 0;
-  transform: scaleX(0);
+  opacity: 1 !important;
+  transform: scaleX(1) !important;
   transform-origin: left; /* Animation startet von links */
   will-change: transform, opacity;
 }
 
 /* ===== ABOUT SECTION (#ueber-mich) ===== */
-#ueber-mich {
-  /* background will be controlled by ScrollBackground component */
-}
 
 .particle-container {
   position: absolute;
@@ -398,7 +653,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: 0; /* Unter dem Inhalt der Sektion */
   overflow: hidden;
 }
 
@@ -406,9 +661,9 @@ body {
   position: absolute;
   width: 2px;
   height: 2px;
-  background: rgba(64, 224, 208, 0.6);
+  /* background: rgba(64, 224, 208, 0.6); /* Wird von spezifischer .particle Regel oben überschrieben */
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(64, 224, 208, 0.4);
+  /* box-shadow: 0 0 8px rgba(64, 224, 208, 0.4); /* Wird von spezifischer .particle Regel oben überschrieben */
   animation-name: ueberMichParticleFloat;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
@@ -453,71 +708,26 @@ body {
   }
 }
 
-.bio-image-wrapper {
-  position: relative;
-  perspective: 800px;
-  width: 100%;
-  max-width: 320px;
-  margin: 0 auto;
-  will-change: transform;
-}
-
-@media (min-width: 768px) {
-  .bio-image-wrapper {
-    margin: 0;
-  }
-}
-
-.bio-image {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08);
-  opacity: 0;
-  transform: translateY(50px) rotateX(10deg) scale(0.95);
-  will-change: transform, opacity;
-}
-
-.bio-image img, .bio-image-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-
-.image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(64, 224, 208, 0.05) 0%, transparent 35%, transparent 65%, rgba(255, 71, 87, 0.05) 100%);
-  opacity: 0.5;
-  transition: opacity 0.4s ease;
-  will-change: opacity;
-}
-
-.bio-image:hover .image-overlay {
-  opacity: 0.8;
-}
-
-.bio-image:hover img {
-  transform: scale(1.03);
-}
+/* .bio-image-wrapper, .bio-image, .bio-image img, .image-overlay Stile sind oben globaler definiert */
 
 .bio-text {
   text-align: left;
 }
 
 .bio-paragraph {
-  font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(1rem, 1.5vw, 1.1rem) !important;
   line-height: 1.75;
-  color: #b0b0b0;
+  font-weight: 400 !important;
+  /* color: #b0b0b0; /* Wird von spezifischer .bio-paragraph Regel oben überschrieben */
   margin-bottom: 1.2rem;
-  opacity: 0;
-  transform: translateY(30px);
+  opacity: 0; /* Für GSAP Animation */
+  transform: translateY(30px); /* Für GSAP Animation */
   will-change: transform, opacity;
+  word-break: normal !important;
+  hyphens: none !important;
+  overflow-wrap: normal !important;
+  white-space: normal !important;
 }
 
 /* Visibility states */
@@ -533,8 +743,8 @@ body {
   animation: underlineExpand 0.7s ease-out 0.4s forwards;
 }
 
-#ueber-mich.is-visible .bio-image {
-  animation: imageReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+#ueber-mich.is-visible .bio-image { /* Note: GSAP steuert dies nun direkt */
+  /* animation: imageReveal 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; */
 }
 
 @keyframes titleReveal {
@@ -551,7 +761,7 @@ body {
   }
 }
 
-@keyframes imageReveal {
+@keyframes imageReveal { /* Wird ggf. von GSAP überschrieben/ersetzt */
   to {
     opacity: 1;
     transform: translateY(0) rotateX(0deg) scale(1);
@@ -572,7 +782,7 @@ body {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.7);
   transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0;
+  opacity: 0; /* Wird von GSAP animiert */
   will-change: transform, opacity, color;
 }
 
@@ -595,6 +805,7 @@ body {
   background: rgba(255, 255, 255, 0.7);
   border-radius: 2px;
   will-change: transform, opacity, background-color;
+  /* Animation wird von Framer Motion in LandingSection.tsx gesteuert */
 }
 
 .scroll-text {
@@ -621,39 +832,18 @@ body {
   background: rgba(255, 71, 87, 0.9);
 }
 
-@keyframes scrollDot {
-  0% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(12px);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-}
 
 /* ===== ALL SECTIONS DARK ===== */
-.section-is-white,
+/* Diese Regel ist durch page-section background: transparent und ScrollBackground abgelöst */
+/* .section-is-white,
 .new-style-section.section-is-white {
-  background-color: #000000 !important; /* Alle Sektionen schwarz */
-  color: #ffffff !important; /* Alle Texte weiß */
+  background-color: #000000 !important; 
+  color: #ffffff !important; 
   z-index: 1;
-}
+} */
 
-.new-style-section.section-is-white .section-title,
+.new-style-section.section-is-white .section-title, /* .section-is-white wird nicht mehr primär für BG verwendet */
 .new-style-section.section-is-white .section-header .title-line,
-.section-title,
-.title-line {
-  color: #ffffff !important; /* Alle Titel weiß */
-}
-
-.stat-number {
-  color: #ffffff !important; /* Stats Zahlen weiß */
-}
 
 .stat-label {
   color: #cccccc !important; /* Stats Labels hellgrau */
@@ -664,9 +854,6 @@ body {
 }
 
 /* ===== MUSIC SECTION ===== */
-#meine-musik .section-header .section-title {
-  color: #ffffff !important;
-}
 
 /* Professional Sound Wave Background */
 .music-bg-subtle {
@@ -676,7 +863,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 1; /* Über ScrollBackground, unter Inhalt */
   overflow: hidden;
 }
 
@@ -721,52 +908,196 @@ body {
 /* Spotify Players Container */
 .spotify-players-container {
   position: relative;
+  z-index: 2;
   width: 100%;
   max-width: 1200px;
-  height: 70vh;
   margin: 3rem auto;
   padding: 2rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 3rem;
+  gap: 2rem;
   align-items: center;
   justify-items: center;
-  border: 2px solid #555; /* Debug border */
   min-height: 400px;
+  overflow: hidden;
 }
 
-.spotify-player {
-  position: relative;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  opacity: 1;
-  transform: scale(1) translateY(0);
-  will-change: transform, opacity;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  background: #333;
-}
+/* .spotify-player Stile sind oben globaler definiert */
 
 .spotify-player:hover {
   transform: scale(1.05) translateY(-10px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); /* Wird von spezifischer Regel oben überschrieben, falls vorhanden */
 }
 
 .spotify-player.is-playing {
   animation: playerPulse 2s ease-in-out infinite;
+  /* box-shadow: /* Wird von spezifischer Regel oben überschrieben */
 }
 
 @keyframes playerPulse {
   0%, 100% {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Wird von spezifischer Regel oben überschrieben */
   }
   50% {
-    box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4), 0 0 50px rgba(255, 71, 87, 0.2);
+    box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4), 0 0 50px rgba(255, 71, 87, 0.2); /* Wird von spezifischer Regel oben überschrieben */
   }
+}
+
+/* Triangle and Cross Shapes for Morphing Background */
+.triangle-shape {
+  width: 100%;
+  height: 100%;
+  border: 3px solid white;
+  border-radius: 0;
+  position: relative;
+}
+
+.triangle-shape::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 25px solid white;
+  transform: translate(-50%, -50%);
+}
+
+.cross-shape {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.cross-shape::before,
+.cross-shape::after {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 2px;
+}
+
+.cross-shape::before {
+  top: 50%;
+  left: 20%;
+  width: 60%;
+  height: 4px;
+  transform: translateY(-50%);
+}
+
+.cross-shape::after {
+  top: 20%;
+  left: 50%;
+  width: 4px;
+  height: 60%;
+  transform: translateX(-50%);
+}
+
+/* Glitch Border Effect */
+.glitch-border {
+  position: relative;
+  filter: blur(1px);
+  border-width: 3px !important;
+}
+
+.glitch-border::before,
+.glitch-border::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid white;
+  border-radius: inherit;
+  opacity: 0.8;
+  animation: glitchShift 4s infinite;
+}
+
+.glitch-border::before {
+  animation-delay: 0s;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.glitch-border::after {
+  animation-delay: 2s;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes glitchShift {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.8;
+  }
+  25% {
+    transform: translate(1px, -1px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-1px, 1px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(1px, 1px);
+    opacity: 0.7;
+  }
+}
+
+/* Slow Rotation Animations */
+@keyframes slowRotateLeft {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes slowRotateRight {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Update morphing shapes with slower animations and more blur */
+.morph-shape-1 {
+  animation: morphShape1 30s ease-in-out infinite,
+             slowRotateRight 50s linear infinite;
+  will-change: transform, border-radius;
+  filter: blur(2px);
+}
+
+.morph-shape-2 {
+  animation: morphShape2 35s ease-in-out infinite,
+             slowRotateLeft 60s linear infinite;
+  will-change: transform, border-radius;
+  filter: blur(2px);
+}
+
+.morph-shape-3 {
+  animation: morphShape3 25s ease-in-out infinite,
+             slowRotateRight 40s linear infinite;
+  will-change: transform, border-radius;
+  filter: blur(2px);
+}
+
+/* Enhanced morphing elements with better blur and positioning */
+.morph-element {
+  filter: blur(2px) saturate(0.7);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(1px);
+  z-index: 0;
+}
+
+.morph-element:hover {
+  filter: blur(1px) saturate(1);
+  opacity: 0.4 !important;
 }
 
 /* Wave Impulses */
@@ -777,19 +1108,10 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 10;
+  z-index: 1;
 }
 
-.wave-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 3px solid #ff4757;
-  border-radius: 50%;
-  animation: waveRing 1.5s ease-out infinite;
-  box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
-}
+/* .wave-ring Stile sind oben globaler definiert */
 
 .ring-1 {
   width: 180px;
@@ -814,15 +1136,15 @@ body {
     width: 180px;
     height: 180px;
     opacity: 1;
-    border-color: #ff4757;
+    /* border-color: #ff4757; /* Wird von var(--color-primary) in .wave-ring oben überschrieben */
     transform: translate(-50%, -50%) scale(1);
   }
   25% {
-    border-color: #ff4757;
+    /* border-color: #ff4757; */
     opacity: 0.8;
   }
   50% {
-    border-color: #40e0d0;
+    border-color: #40e0d0; /* var(--color-secondary) wäre konsistenter */
     opacity: 0.6;
   }
   75% {
@@ -833,7 +1155,7 @@ body {
     width: 400px;
     height: 400px;
     opacity: 0;
-    border-color: #ff4757;
+    /* border-color: #ff4757; */
     transform: translate(-50%, -50%) scale(1.5);
   }
 }
@@ -847,7 +1169,7 @@ body {
   height: 100%;
   background-size: cover;
   background-position: center;
-  background-color: #444;
+  background-color: #444; /* Fallback */
   transition: transform 0.3s ease;
 }
 
@@ -885,7 +1207,7 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  z-index: 5;
+  z-index: 15;
 }
 
 .spotify-player .play-button:hover {
@@ -908,16 +1230,18 @@ body {
 /* Track Info */
 .track-info {
   position: absolute;
-  bottom: -60px;
+  bottom: -60px; /* Position so it's visible or animates in */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Add transform transition */
+  will-change: opacity, transform;
 }
 
 .spotify-player:hover .track-info {
   opacity: 1;
+  transform: translateX(-50%) translateY(10px); /* Slide in from bottom on hover */
 }
 
 .track-title {
@@ -959,7 +1283,7 @@ body {
 }
 
 .spotify-link:hover {
-  background: #1DB954;
+  background: #1DB954; /* Spotify Green */
   transform: scale(1.1);
 }
 
@@ -973,6 +1297,8 @@ body {
 .loading-spinner {
   text-align: center;
   padding: 4rem 0;
+  position: relative; /* Für z-index */
+  z-index: 2;
 }
 
 .spinner {
@@ -994,50 +1320,80 @@ body {
   }
 }
 
-/* ===== STATS SECTION ===== */
-.stats-container {
-  max-width: 900px;
-  width: 90%;
-  margin: 2rem auto;
-  padding: 1rem 0;
+/* ===== ALLE TITEL UND UNTERLINIEN SICHTBAR ===== */
+.section-title {
+  opacity: 1 !important;
+  transform: none !important;
+  color: #FFFFFF !important;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2.5rem 2rem;
-  margin-bottom: 2.5rem;
+/* ===== FONT SHARPNESS FIX FÜR SECTIONS AB MUSIC ===== */
+#music .section-title,
+#labels .section-title,
+#clubs .section-title,
+#stats .section-title,
+#gallery .section-title,
+#videos .section-title,
+#contact .section-title,
+#music,
+#labels,
+#clubs, 
+#stats,
+#gallery,
+#videos,
+#contact {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  font-smooth: always !important;
+  -webkit-text-stroke: 0.01em transparent !important;
 }
 
-.stat-item {
-  text-align: center;
+/* Spezifische Elemente in diesen Sections */
+#music *,
+#labels *,
+#clubs *,
+#stats *,
+#gallery *,
+#videos *,
+#contact * {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  font-smooth: always !important;
 }
 
-.stat-number {
-  display: block;
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(2.8rem, 7vw, 4.5rem);
-  font-weight: 800;
-  color: #000000;
-  line-height: 1.1;
-  margin-bottom: 0.25em;
+/* Contact Form spezifische Sharpness */
+.contact-form *,
+.form-group *,
+.submit-button,
+.contact-info *,
+.video-title,
+.video-description,
+.gallery-info * {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  font-smooth: always !important;
 }
 
-.stat-separator {
-  width: 50px;
-  height: 2px;
-  background-color: #ccc;
-  border: none;
-  margin: 0.5rem auto 0.75rem auto;
+.title-line {
+  opacity: 1 !important;
+  transform: none !important;
+  color: #FFFFFF !important;
 }
 
-.stat-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(0.8rem, 1.8vw, 1rem);
-  color: #333333;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.title-underline {
+  opacity: 1 !important;
+  transform: scaleX(1) !important;
+  background: #FFFFFF !important;
+  height: 3px !important;
+  width: 50% !important;
+  margin: 0 !important;
+  margin-left: 0 !important;
 }
+
+/* .stat-label ist oben global definiert */
 
 .spotify-item {
   grid-column: 1 / -1;
@@ -1055,6 +1411,8 @@ body {
   width: 90%;
   margin: 2rem auto;
   text-align: center;
+  position: relative; /* Für z-index */
+  z-index: 2;
 }
 
 .zoom-list {
@@ -1063,17 +1421,24 @@ body {
   margin: 0;
 }
 
+/* .zoom-list-item ist oben global definiert und wird von GSAP animiert */
 .zoom-list-item {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 600;
-  color: #000000;
+  font-family: 'Inter', sans-serif !important;
+  color: #FFFFFF !important;
   padding: 0.5em 0;
   margin-bottom: 0.5em;
-  opacity: 0;
-  transform: scale(0.5);
-  will-change: opacity, transform;
+  opacity: 1 !important; /* Sichtbar */
+  transform: scale(1) !important; /* Normal groß */
+  font-size: clamp(2.8rem, 5vw, 3.8rem) !important; /* Größer aber responsiv */
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+  font-smooth: always !important;
+  -webkit-text-stroke: 0.01em transparent !important;
 }
+
 
 .zoom-list-item:last-child {
   border-bottom: none;
@@ -1084,6 +1449,8 @@ body {
   max-width: 1000px;
   width: 90%;
   margin: 2rem auto;
+  position: relative; /* Für z-index */
+  z-index: 2;
 }
 
 .video-grid {
@@ -1100,8 +1467,8 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0;
-  transform: translateY(50px) scale(0.9);
+  opacity: 0; /* Für GSAP Animation */
+  transform: translateY(50px) scale(0.9); /* Für GSAP Animation */
   will-change: opacity, transform;
 }
 
@@ -1122,14 +1489,15 @@ body {
   overflow: hidden;
 }
 
-.video-thumbnail img {
+.video-thumbnail img, .video-thumbnail-img { /* Klasse für Next Image hinzugefügt */
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
 }
 
-.video-item:hover .video-thumbnail img {
+.video-item:hover .video-thumbnail img,
+.video-item:hover .video-thumbnail-img {
   transform: scale(1.1);
 }
 
@@ -1151,7 +1519,7 @@ body {
   opacity: 1;
 }
 
-.play-button {
+.play-button { /* Allgemeine Play-Button Stile, spezifische Spotify/Video ggf. anpassen */
   width: 60px;
   height: 60px;
   background: rgba(255, 255, 255, 0.9);
@@ -1172,7 +1540,7 @@ body {
   width: 24px;
   height: 24px;
   color: #000;
-  margin-left: 2px;
+  margin-left: 2px; /* Visuelle Zentrierung des Dreiecks */
 }
 
 .video-duration {
@@ -1212,30 +1580,38 @@ body {
   margin-top: 2rem;
 }
 
+/* .cta-badge ist oben global definiert */
 .cta-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50px;
-  color: #ffffff;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  cursor: pointer;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 1rem 1.5rem !important;
+  text-decoration: none !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  border-radius: 8px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
 }
 
 .cta-badge:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px) !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+.cta-badge:focus {
+  outline: 2px solid var(--color-secondary) !important;
+  outline-offset: 2px !important;
 }
 
 .live-indicator {
   width: 8px;
   height: 8px;
-  background: #ff4757;
+  background: #ff4757; /* var(--color-primary) wäre konsistenter */
   border-radius: 50%;
   animation: pulse 2s infinite;
 }
@@ -1243,7 +1619,7 @@ body {
 .cta-badge svg {
   width: 16px;
   height: 16px;
-  color: #40e0d0;
+  color: #40e0d0; /* var(--color-secondary) wäre konsistenter */
 }
 
 @keyframes pulse {
@@ -1262,6 +1638,8 @@ body {
   max-width: 1200px;
   width: 90%;
   margin: 2rem auto;
+  position: relative; /* Für z-index */
+  z-index: 2;
 }
 
 .contact-grid {
@@ -1272,8 +1650,8 @@ body {
 }
 
 .contact-info {
-  opacity: 0;
-  transform: translateX(-50px);
+  opacity: 0; /* Für GSAP Animation */
+  transform: translateX(-50px); /* Für GSAP Animation */
   will-change: opacity, transform;
 }
 
@@ -1398,8 +1776,8 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   padding: 2.5rem;
-  opacity: 0;
-  transform: translateX(50px);
+  opacity: 0; /* Für GSAP Animation */
+  transform: translateX(50px); /* Für GSAP Animation */
   will-change: opacity, transform;
 }
 
@@ -1455,170 +1833,128 @@ body {
   color: #888888;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.12);
-}
+/* .form-group input:focus, .form-group select:focus, .form-group textarea:focus ist oben global definiert */
+
 
 .form-group textarea {
   resize: vertical;
   min-height: 120px;
 }
 
-.submit-button {
-  padding: 15px 30px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  color: #ffffff;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-top: 1rem;
-}
-
+/* .submit-button ist oben global definiert */
 .submit-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 35px rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(255, 255, 255, 0.1); /* Wird von globaler Regel oben überschrieben, falls vorhanden */
+  background: rgba(255, 255, 255, 0.15); /* Wird von globaler Regel oben überschrieben, falls vorhanden */
 }
+
 
 /* ===== GALLERY SECTION ===== */
 .gallery-container {
   max-width: 1200px; /* Max-Breite der Galerie */
   width: 90%; /* Oder 100% wenn padding von page-section kommt */
   margin: 2rem auto; /* Zentrierung und Abstand */
+  position: relative; /* Für z-index */
+  z-index: 2;
 }
 
 .gallery-grid {
   display: grid;
-  /* Standard: responsive Spalten, min. 150px breit */
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem; /* Etwas kleinerer Gap für Mobile First */
-  grid-auto-flow: dense; /* Wichtig für lückenloses Layout */
-  grid-auto-rows: 150px; /* Basis-Höhe für Reihen */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem; 
+  grid-auto-flow: dense; 
+  grid-auto-rows: 180px; 
   align-items: stretch;
 }
 
-/* Anpassung für mittlere Bildschirme (Tablets, kleine Desktops) */
 @media (min-width: 768px) {
   .gallery-grid {
-    /* Deine ursprünglichen Werte waren 4 Spalten und 200px Reihenhöhe */
-    /* Die custom-gallery-grid hatte repeat(3, 1fr) und 150px Reihen */
-    /* Wähle, was besser passt. Hier ein Kompromiss oder deine Tablet-spezifischen Werte: */
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Flexibler */
-    /* Oder fester: grid-template-columns: repeat(4, 1fr); */
-    gap: 1.5rem; /* Etwas größerer Gap */
-    grid-auto-rows: 180px; /* Angepasste Basis-Höhe */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 1.5rem; 
+    grid-auto-rows: 200px; 
   }
 }
 
-/* Anpassung für größere Bildschirme (Desktops) */
 @media (min-width: 1024px) {
   .gallery-grid {
-    /* Deine ursprünglichen Werte waren 6 Spalten und 180px Reihenhöhe */
-    /* Die custom-gallery-grid hatte repeat(auto-fill, minmax(200px, 1fr)) und 180px Reihen */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Flexibler */
-    /* Oder fester: grid-template-columns: repeat(6, 1fr); */
-    gap: 1.5rem; /* Konsistenter Gap */
-    grid-auto-rows: 200px; /* Basis-Höhe für Reihen auf Desktops */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 1.5rem; 
+    grid-auto-rows: 200px; 
   }
 }
 
-/* Grundlegendes Styling für jedes Galerie-Item */
+/* .gallery-item ist oben global definiert und wird von GSAP animiert */
 .gallery-item {
-  background: rgba(255, 255, 255, 0.05); /* Optional, wenn Bilder den Raum füllen */
-  border-radius: 12px; /* Wichtig für abgerundete Ecken */
-  overflow: hidden; /* Stellt sicher, dass Inhalt (Bild) die Rundung respektiert */
+  /* background: rgba(255, 255, 255, 0.05); /* Wird von globaler .gallery-item Regel oben überschrieben */
+  border-radius: 12px; 
+  overflow: hidden; 
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Optionaler Rand */
-  opacity: 1; /* Standardmäßig sichtbar, Animationen ggf. separat */
-  transform: none; /* Standard Transform */
-  will-change: transform; /* Für Hover-Performance */
-  min-width: 0; /* Verhindert Grid-Überlauf */
-
-  /* Standardmäßig spannt jedes Item 1 Zeile und 1 Spalte,
-     außer es wird durch spezifische Klassen überschrieben.
-     aspect-ratio hier kann problematisch sein, wenn grid-auto-rows einen festen Wert hat
-     und die Spans variieren. Besser die Spans steuern lassen. */
+  /* transition: transform 0.3s ease, box-shadow 0.3s ease; /* Wird von globaler .gallery-item Regel oben überschrieben */
+  /* border: 1px solid rgba(255, 255, 255, 0.1); /* Wird von globaler .gallery-item Regel oben überschrieben */
+  opacity: 1; /* Standard, GSAP animiert es */
+  transform: none; /* Standard, GSAP animiert es */
+  will-change: transform, opacity; /* opacity hinzugefügt für GSAP */
+  min-width: 0; 
   grid-column: span 1;
   grid-row: span 1;
 }
 
-.gallery-item:focus-visible { /* Bessere Sichtbarkeit des Fokus */
-  outline: 2px solid #40e0d0; /* Beispielhafte Fokus-Farbe */
+
+.gallery-item:focus-visible { 
+  outline: 2px solid var(--color-secondary); 
   outline-offset: 2px;
-  box-shadow: 0 0 15px rgba(64, 224, 208, 0.5); /* Optionaler Glow-Effekt */
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.5); /* var(--glow-secondary) ähnlich */
 }
 
 
 .gallery-item:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  /* transform: translateY(-5px) scale(1.02); /* Wird von globaler .gallery-item:hover Regel oben überschrieben */
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Wird von globaler .gallery-item:hover Regel oben überschrieben */
 }
 
-/* Größen-Klassen für Galerie-Items (basierend auf deiner globalen CSS Idee) */
-/* Kleine Kacheln (Standard, falls keine andere Größenklasse angewendet wird) */
 .gallery-item--small {
   grid-column: span 1;
   grid-row: span 1;
-  /* aspect-ratio: 1 / 1;  Falls benötigt, aber grid-row-span ist oft besser */
 }
 
-/* Mittelgroße Kacheln */
 .gallery-item--medium {
-  grid-column: span 2; /* Nimmt 2 Spalten ein */
-  grid-row: span 1;    /* Nimmt 1 Zeile ein (oder span 2 für höher) */
-  /* aspect-ratio: 4 / 3; */
+  grid-column: span 2; 
+  grid-row: span 1;    
 }
-@media (max-width: 767px) { /* Auf sehr kleinen Schirmen ggf. anpassen */
+@media (max-width: 767px) { 
   .gallery-item--medium {
-    grid-column: span 1; /* Oder was immer für dein Mobile-Layout passt */
-    grid-row: span 2;    /* Beispiel: höher statt breiter */
+    grid-column: span 1; 
+    grid-row: span 2;    
   }
 }
 
 
-/* Große Kacheln */
 .gallery-item--large {
-  grid-column: span 2; /* Nimmt 2 Spalten ein */
-  grid-row: span 2;    /* Nimmt 2 Zeilen ein */
-  /* aspect-ratio: 16 / 9; */
+  grid-column: span 2; 
+  grid-row: span 2;    
 }
-@media (max-width: 767px) { /* Auf sehr kleinen Schirmen ggf. anpassen */
+@media (max-width: 767px) { 
   .gallery-item--large {
-    grid-column: span 1; /* Oder was immer für dein Mobile-Layout passt */
-    grid-row: span 2;    /* Beispiel: schmaler aber hoch */
+    grid-column: span 1; 
+    grid-row: span 2;    
   }
 }
 
-/* Wenn du eine 'tall' Klasse hast: */
 .gallery-item--tall {
   grid-column: span 1;
   grid-row: span 2;
-  /* aspect-ratio: 3 / 4; */
 }
 
 
-/* Container für das Next.js Image, damit 'fill' funktioniert */
 .gallery-image {
   position: relative;
   width: 100%;
-  height: 100%; /* Wichtig für fill */
-  overflow: hidden; /* Stellt sicher, dass das Bild innerhalb der Rundung bleibt */
-  border-radius: इन्헤रिйт; /* Erbt border-radius vom .gallery-item, falls dort gesetzt */
+  height: 100%; 
+  overflow: hidden; 
+  border-radius: inherit; 
 }
 
-/* Das eigentliche <img> Tag (wird von Next.js <Image> erzeugt) */
-/* .gallery-img wird der className auf <Image> sein, falls du es brauchst */
 .gallery-image img, .gallery-img {
-  /* object-fit und object-position werden per inline-style vom TSX gesetzt */
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1627,22 +1963,11 @@ body {
   transform: scale(1.05);
 }
 
-/* Overlay und Info Styles (können von deinem globalen CSS übernommen werden) */
-.gallery-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.7) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: इन्헤रिйт; /* Erbt border-radius */
-}
-
+/* .gallery-overlay ist oben global definiert */
 .gallery-item:hover .gallery-overlay {
   opacity: 1;
 }
+
 
 .zoom-icon {
   width: 50px;
@@ -1661,7 +1986,7 @@ body {
 .zoom-icon svg {
   width: 24px;
   height: 24px;
-  color: #000; /* Oder deine gewünschte Farbe */
+  color: #000; 
 }
 
 .gallery-info {
@@ -1673,7 +1998,7 @@ body {
   color: white;
   transform: translateY(100%);
   transition: transform 0.3s ease;
-  background: linear-gradient(transparent, rgba(0,0,0,0.6) 80%); /* Subtilerer Gradient */
+  background: linear-gradient(transparent, rgba(0,0,0,0.6) 80%); 
 }
 
 .gallery-item:hover .gallery-info {
@@ -1681,7 +2006,7 @@ body {
 }
 
 .gallery-info h3 {
-  font-family: 'Inter', sans-serif; /* Oder deine bevorzugte Schriftart */
+  font-family: 'Inter', sans-serif; 
   font-size: 0.9rem;
   font-weight: 600;
   color: #ffffff;
@@ -1693,45 +2018,48 @@ body {
 /* ===== GALLERY MODAL (LIGHTBOX) ===== */
 .gallery-modal {
   position: fixed;
-  inset: 0; /* top, right, bottom, left = 0 */
+  inset: 0; 
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9); /* Etwas transparenter für Kontext */
-  backdrop-filter: blur(8px); /* Weichzeichner-Effekt für den Hintergrund */
-  z-index: 10000; /* Sehr hoher z-index, um über allem zu liegen */
+  background: rgba(0, 0, 0, 0.9); 
+  backdrop-filter: blur(8px); 
+  z-index: 10000; 
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem; /* Kleinerer Padding für mehr Bildfläche auf Mobile */
+  padding: 1rem; 
 }
 
 .modal-content {
   position: relative;
-  max-width: 95vw;   /* Erlaube dem Bild, breiter zu sein */
-  max-height: 95vh;  /* Erlaube dem Bild, höher zu sein */
-  width: 100%; /* Füllt den verfügbaren Platz bis max-width/height */
-  height: 100%;/* Füllt den verfügbaren Platz bis max-width/height */
-  display: flex; /* Für Zentrierung des Bildes, falls es kleiner ist als der Container */
+  max-width: 90vw;   
+  max-height: 90vh;  
+  width: auto; 
+  height: auto;
+  display: flex; 
   align-items: center;
   justify-content: center;
-  border-radius: 8px; /* Optional: Abrundung für den Content-Bereich selbst */
-  overflow: hidden; /* Verhindert, dass das Bild übersteht, falls Rundung hier gesetzt */
+  border-radius: 8px; 
+  overflow: hidden; 
 }
 
-/* Die Klasse .modal-image wird dem Next.js <Image> Tag im Modal zugewiesen */
 .modal-image {
-  object-fit: contain !important; /* Stellt sicher, dass das ganze Bild sichtbar ist */
-  border-radius: 4px; /* Leichte Abrundung für das Bild selbst */
-  /* width und height werden von 'fill' und dem Eltercontainer .modal-content gesteuert */
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important; 
+  object-position: center center !important;
+  border-radius: 4px;
+  max-width: 90vw;
+  max-height: 90vh;
 }
 
 .modal-close {
   position: absolute;
-  top: 10px; /* Näher am Rand, innerhalb des sichtbaren Bereichs */
+  top: 10px; 
   right: 10px;
   width: 40px;
   height: 40px;
-  background: rgba(30, 30, 30, 0.7); /* Etwas sichtbarer */
+  background: rgba(30, 30, 30, 0.7); 
   border: none;
   border-radius: 50%;
   display: flex;
@@ -1739,7 +2067,7 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  z-index: 10001; /* Über dem Modal-Inhalt */
+  z-index: 10001; 
 }
 
 .modal-close:hover {
@@ -1747,34 +2075,64 @@ body {
   transform: scale(1.1);
 }
 
-.modal-close:focus-visible { /* Deutlicher Fokus für den Schließen-Button */
-  outline: 2px solid #40e0d0;
+.modal-close:focus-visible { 
+  outline: 2px solid var(--color-secondary);
   outline-offset: 2px;
 }
 
 .modal-close svg {
-  width: 22px; /* Etwas kleiner für den 40px Button */
+  width: 22px; 
   height: 22px;
-  color: #ffffff; /* SVG Farbe */
+  color: #ffffff; 
 }
 
-/* Media Query für größere Bildschirme, falls der Schließen-Button außerhalb sein soll */
 @media (min-width: 768px) {
   .gallery-modal {
-    padding: 2rem; /* Größerer Padding auf größeren Schirmen */
+    padding: 2rem; 
   }
   .modal-close {
-    /* Hier deine Werte für größere Screens, z.B.: */
-    top: -15px;
-    right: -15px;
-    /* Oder weiterhin innerhalb, aber größer:
-    top: 20px;
+    top: 20px; /* Innerhalb, aber größer/deutlicher */
     right: 20px;
     width: 44px;
     height: 44px;
-    */
   }
-  /* .modal-close svg { width: 24px; height: 24px; } */
+   .modal-close svg { width: 24px; height: 24px; } 
+}
+
+/* ===== STATS MOBILE LAYOUT ===== */
+.stats-layout {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  margin-bottom: 5rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .stats-layout {
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .stats-layout > div {
+    flex-direction: row !important;
+    gap: 2rem !important;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .stats-layout > div > div {
+    min-width: 140px;
+  }
+  
+  .stats-layout .stat-number {
+    font-size: 1.8rem !important;
+  }
+  
+  .stats-layout .spotify-plays {
+    font-size: 2.5rem !important;
+  }
 }
 
 /* ===== RESPONSIVE ===== */
@@ -1789,7 +2147,8 @@ body {
   }
 
   .zoom-list-item {
-    font-size: clamp(1.2rem, 5vw, 2rem);
+    font-size: clamp(1.5rem, 6vw, 2.2rem) !important;
+    padding: 1rem 0 !important;
   }
 
   .video-grid {
@@ -1798,7 +2157,7 @@ body {
   }
 
   .featured-video {
-    grid-column: 1;
+    grid-column: 1; /* Bleibt bei 1, da Elterngrid 1 Spalte hat */
   }
 
   .video-info {
@@ -1809,7 +2168,7 @@ body {
     font-size: 1.1rem;
   }
 
-  .play-button {
+  .play-button { /* Allgemeine Anpassung, spezifische .spotify-player .play-button behält Vorrang, falls unterschiedlich */
     width: 50px;
     height: 50px;
   }
@@ -1823,11 +2182,16 @@ body {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-
-  .contact-info,
+  
   .contact-form {
-    transform: none !important;
-    opacity: 1 !important;
+    padding: 1.5rem !important;
+  }
+
+  /* GSAP steuert opacity/transform, daher !important nicht ideal, aber beibehalten falls CSS Fallback nötig */
+  .contact-info, 
+  .contact-form {
+    transform: none !important; 
+    opacity: 1 !important; 
   }
 
   .form-row {
@@ -1843,19 +2207,18 @@ body {
     justify-content: center;
   }
 
-  /* Hier wurden unnötige gallery-grid Regeln entfernt, da die spezifischeren Regeln bei 1024px, 768px und 767px greifen */
-
-  .gallery-item.featured {
-    grid-column: 1;
+  .gallery-item.featured { /* Nicht mehr .featured, da Grid-Logik in JS */
+    grid-column: span 1; /* Stellt sicher, dass es auf Mobile nicht zu breit wird */
   }
 
   .gallery-item,
   .gallery-item.featured {
-    transform: none !important;
-    opacity: 1 !important;
+    /* transform: none !important; /* GSAP steuert dies */
+    /* opacity: 1 !important; /* GSAP steuert dies */
   }
 
-  .modal-close {
+  /* Modal close button Anpassung für Mobile - die obere Regel für .modal-close ist bereits gut für mobile */
+  /* .modal-close {
     top: -40px;
     right: -40px;
     width: 35px;
@@ -1865,45 +2228,145 @@ body {
   .modal-close svg {
     width: 20px;
     height: 20px;
-  }
+  } */
 
   .spotify-players-container {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Flexibler für verschiedene Bildschirmbreiten */
+    grid-template-rows: auto; /* Automatische Reihenhöhe */
     gap: 1.5rem;
     height: auto;
     padding: 1rem;
   }
 
   .spotify-player {
-    width: 150px;
+    width: 150px; /* Oder dynamisch mit aspect-ratio */
     height: 150px;
   }
 
-  .play-button {
-    width: 50px;
-    height: 50px;
-  }
+  /* .play-button und .play-button svg für Spotify Player werden durch generelle .play-button Regeln abgedeckt oder spezifische Spotify Regeln oben */
 
-  .play-button svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .floating-orb {
+  .floating-orb { /* Diese Klassen wurden nicht im HTML gefunden, ggf. entfernen */
     display: none;
   }
 
-  .floating-line {
+  .floating-line { /* Diese Klassen wurden nicht im HTML gefunden, ggf. entfernen */
     display: none;
   }
 }
 
 /* ===== GRADIENT LINK ===== */
 .text-gradient-link {
-  background: linear-gradient(90deg, #ff4757, #40e0d0);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent;
+  color: transparent; /* Für Fallback, falls background-clip nicht unterstützt wird */
+}
+
+/* ===== COHESION-INSPIRED EFFECTS ===== */
+.enhanced-text-reveal {
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+.enhanced-text-reveal span {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+/* Enhanced magnetic cursor effects */
+.magnetic-cursor {
+  backdrop-filter: blur(10px) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.magnetic-cursor-dot {
+  background: var(--color-secondary) !important;
+  box-shadow: 0 0 20px var(--color-secondary) !important;
+}
+
+/* Section transitions */
+.page-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-transition-overlay {
+  pointer-events: none;
+  background: linear-gradient(
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  ) !important;
+}
+
+/* Enhanced magnetic element effects */
+.magnetic-element {
+  transform-origin: center;
+  will-change: transform;
+  cursor: none;
+}
+
+.magnetic-element:hover {
+  z-index: 10;
+}
+
+/* Parallax layers styling */
+.parallax-background {
+  background: transparent;
+  will-change: transform;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced hover effects for interactive elements */
+.zoom-list-item.magnetic-element:hover {
+  transform: scale(1.05) translateZ(0) !important;
+  color: var(--color-secondary) !important;
+  text-shadow: 0 0 30px var(--color-secondary) !important;
+}
+
+/* Advanced section scaling effects */
+.page-section.scaling {
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+/* Cohesion-style floating elements */
+.floating-element {
+  animation: floatGently 8s ease-in-out infinite;
+}
+
+@keyframes floatGently {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(240deg);
+  }
+}
+
+/* Enhanced section visibility effects */
+.page-section:not(.is-visible) {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+.page-section.is-visible {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+/* Improved text rendering for enhanced effects */
+.enhanced-text-reveal span {
+  font-feature-settings: 'liga', 'kern';
+  text-rendering: optimizeLegibility;
 }

@@ -2,15 +2,15 @@
 
 import Image from 'next/image'
 
+// GSAP Animationen für .video-item werden von gsap-animations.js gehandhabt
+
 export default function VideoSection() {
   return (
     <section 
       id="videos" 
-      className="page-section section-is-white new-style-section"
-      style={{
-        background: 'linear-gradient(to bottom, #3a5668 0%, #1a2832 100%)',
-        position: 'relative'
-      }}
+      className="page-section new-style-section" // section-is-white entfernt
+      // style={{ background: 'linear-gradient(to bottom, #3a5668 0%, #1a2832 100%)' }} // Entfernt
+      style={{ position: 'relative' }}
     >
       <div className="section-header">
         <h2 className="section-title">
@@ -22,9 +22,17 @@ export default function VideoSection() {
 
       <div className="video-showcase-container">
         <div className="video-grid">
-          <div className="video-item featured-video">
+          {/* Featured Video */}
+          <div className="video-item featured-video"> {/* opacity & transform von GSAP gesteuert */}
             <div className="video-thumbnail">
-              <Image src="/assets/images/image1.jpg" alt="Berghain Set 2024" width={400} height={225} className="video-thumbnail-img" />
+              <Image 
+                src="/assets/images/image1.jpg" 
+                alt="Berghain Set 2024" 
+                width={800} // Größere intrinsische Größe für Featured Video, wenn Original größer ist
+                height={450}
+                className="video-thumbnail-img" 
+                priority // Wichtig für LCP
+              />
               <div className="video-overlay">
                 <div className="play-button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -40,9 +48,16 @@ export default function VideoSection() {
             </div>
           </div>
 
+          {/* Weitere Videos */}
           <div className="video-item">
             <div className="video-thumbnail">
-              <Image src="/assets/images/Profilbild1.jpg" alt="Studio Session" width={400} height={225} className="video-thumbnail-img" />
+              <Image 
+                src="/assets/images/Profilbild1.jpg" 
+                alt="Studio Session" 
+                width={640} // Beispielhafte Größe
+                height={360}
+                className="video-thumbnail-img" 
+              />
               <div className="video-overlay">
                 <div className="play-button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -60,7 +75,13 @@ export default function VideoSection() {
 
           <div className="video-item">
             <div className="video-thumbnail">
-              <Image src="/assets/images/image1.jpg" alt="Festival Highlights" width={400} height={225} className="video-thumbnail-img" />
+              <Image 
+                src="/assets/images/image7.jpg" /* Geändert für Vielfalt */ 
+                alt="Festival Highlights" 
+                width={640} 
+                height={360}
+                className="video-thumbnail-img" 
+              />
               <div className="video-overlay">
                 <div className="play-button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -78,7 +99,13 @@ export default function VideoSection() {
 
           <div className="video-item">
             <div className="video-thumbnail">
-              <Image src="/assets/images/Profilbild1.jpg" alt="Mix Tutorial" width={400} height={225} className="video-thumbnail-img" />
+              <Image 
+                src="/assets/images/image6.jpg" /* Geändert für Vielfalt */
+                alt="Mix Tutorial" 
+                width={640} 
+                height={360}
+                className="video-thumbnail-img" 
+              />
               <div className="video-overlay">
                 <div className="play-button">
                   <svg viewBox="0 0 24 24" fill="currentColor">
@@ -96,13 +123,28 @@ export default function VideoSection() {
         </div>
 
         <div className="video-cta">
-          <div className="cta-badge">
+          <a 
+            href="https://www.youtube.com/@djarado" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="cta-badge"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '1rem 1.5rem',
+              textDecoration: 'none',
+              color: '#ffffff',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+          >
             <div className="live-indicator"></div>
-            <span>More Videos on YouTube & Vimeo</span>
+            <span>More Videos on YouTube</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
-          </div>
+          </a>
         </div>
       </div>
     </section>

@@ -1,36 +1,27 @@
 'use client'
 
+// GSAP Animationen für .zoom-list-item werden von gsap-animations.js gehandhabt
+
 export default function ClubsSection() {
   const venues = [
-    "Tomorrowland",
-    "Watergate, Berlin",
-    "Space, Ibiza", 
-    "Awakenings",
-    "Berghain / Panorama Bar",
-    "Fabric, London",
-    "Cocoon",
-    "Time Warp",
-    "DC10, Ibiza",
-    "Printworks, London",
-    "Movement Detroit",
-    "Sonus Festival"
-  ]
+    "Tomorrowland", "Watergate, Berlin", "Space, Ibiza", "Awakenings",
+    "Berghain / Panorama Bar", "Fabric, London", "Cocoon", "Time Warp",
+    "DC10, Ibiza", "Printworks, London", "Movement Detroit", "Sonus Festival"
+  ];
 
   return (
     <section 
       id="clubs" 
-      className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white"
-      style={{
-        background: 'linear-gradient(to bottom, #050508 0%, #0f1419 100%)',
-        position: 'relative'
-      }}
+      className="page-section new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white" // section-is-white entfernt
+      // style={{ background: 'linear-gradient(to bottom, #050508 0%, #0f1419 100%)' }} // Entfernt
+      style={{ position: 'relative' }}
     >
       <div className="section-header mb-16">
-        <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
+        <h2 className="section-title text-5xl md:text-6xl lg:text-7xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
           <span className="title-line block">Clubs &</span>
           <span className="title-line block">Events</span>
         </h2>
-        <div className="title-underline w-12 h-1 bg-gradient-to-r from-cyan-200 to-cyan-400 mx-auto"></div>
+        <div className="title-underline"></div>
       </div>
       
       <div className="zoom-list-container max-w-3xl w-full text-center">
@@ -38,7 +29,9 @@ export default function ClubsSection() {
           {venues.map((venue, index) => (
             <li 
               key={index}
-              className="zoom-list-item text-2xl md:text-3xl lg:text-4xl font-semibold text-white py-4 mb-2 opacity-0 transform scale-50 will-change-[opacity,transform] cursor-pointer hover:text-cyan-200 transition-colors duration-300"
+              className="zoom-list-item text-white py-4 mb-4 opacity-1 transform scale-100 will-change-[opacity,transform] cursor-pointer hover:text-cyan-200 transition-colors duration-300"
+              style={{ fontSize: '1.8rem', fontWeight: '600' }}
+              // opacity, transform und will-change werden von GSAP in gsap-animations.js gesteuert
             >
               {venue}
             </li>

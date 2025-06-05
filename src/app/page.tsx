@@ -8,12 +8,12 @@ import GallerySection from '@/components/GallerySection'
 import VideoSection from '@/components/VideoSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
-import ScrollBackground from '@/components/ScrollBackground'
+
 
 export default function Home() {
   return (
     <>
-      <ScrollBackground />
+      
       <main className="relative">
         <LandingSection />
         <BiographySection />

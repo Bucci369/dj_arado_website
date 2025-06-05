@@ -26,11 +26,8 @@ export default function ContactSection() {
   return (
     <section 
       id="contact" 
-      className="page-section section-is-white new-style-section"
-      style={{
-        background: 'linear-gradient(to bottom, #1a2832 0%, #050508 100%)',
-        position: 'relative'
-      }}
+      className="page-section new-style-section"
+      style={{ position: 'relative' }}
     >
       <div className="section-header">
         <h2 className="section-title">

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import EnhancedTextReveal from './EnhancedTextReveal'
 
 // Register GSAP plugin
 if (typeof window !== 'undefined') {
@@ -20,11 +21,9 @@ export default function BiographySection() {
 
     const section = sectionRef.current
     const bioImageWrapper = bioImageWrapperRef.current
-    const particleContainer = particleContainerRef.current
-
+    
     if (!section || !bioImageWrapper) return
 
-    // Intersection Observer für is-visible Klasse
     const observerOptions = {
       root: null,
       rootMargin: '-10% 0px -10% 0px',
@@ -37,145 +36,33 @@ export default function BiographySection() {
           if (entry.intersectionRatio >= 0.1) {
             section.classList.add('is-visible')
           }
-
-          // Partikel initialisieren
-          if (entry.intersectionRatio >= 0.5 && particleContainer && !particleContainer.dataset.initialized) {
-            setTimeout(() => {
-              initUeberMichParticles(particleContainer)
-              particleContainer.dataset.initialized = 'true'
-            }, 200)
-          }
         }
       })
     }
 
     const observer = new IntersectionObserver(observerCallback, observerOptions)
     observer.observe(section)
+    
+    // GSAP Animationen werden von gsap-animations.js global gehandhabt
+    // Titel, Underline, Bio Image, Bio Paragraphs
+    // Parallax-Effekt bleibt hier, da er spezifisch für dieses Bild-Wrapper ist
 
-    // GSAP Animationen
-    // Basis Section Animation - DISABLED to prevent black bar
-    // gsap.fromTo(section, 
-    //   { opacity: 0, y: 80 }, 
-    //   {
-    //     opacity: 1, 
-    //     y: 0, 
-    //     duration: 1, 
-    //     ease: "power2.out",
-    //     scrollTrigger: { 
-    //       trigger: section, 
-    //       start: "top 80%", 
-    //       toggleActions: "play none none reverse" 
-    //     }
-    //   }
-    // )
-
-    // Titel Animation
-    const titleLines = section.querySelectorAll('.title-line')
-    titleLines.forEach((el, i) => {
-      gsap.fromTo(el, 
-        { opacity: 0, y: 50 }, 
-        {
-          opacity: 1, 
-          y: 0, 
-          duration: 0.8, 
-          delay: i * 0.15,
-          scrollTrigger: { 
-            trigger: el, 
-            start: "top 85%", 
-            toggleActions: "play none none reverse" 
-          }
-        }
-      )
-    })
-
-    // Underline Animation
-    const titleUnderline = section.querySelector('.title-underline')
-    if (titleUnderline) {
-      gsap.fromTo(titleUnderline, 
-        { opacity: 0, scaleX: 0 }, 
-        {
-          opacity: 1, 
-          scaleX: 1, 
-          duration: 0.6,
-          scrollTrigger: { 
-            trigger: titleUnderline, 
-            start: "top 85%", 
-            toggleActions: "play none none reverse" 
-          }
-        }
-      )
-    }
-
-    // Bio Image Animation - basierend auf alter Website
-    const bioImage = section.querySelector('.bio-image')
-    if (bioImage) {
-      gsap.fromTo(bioImage,
-        { 
-          opacity: 0, 
-          scale: 0.95, 
-          rotateY: -15, 
-          rotateX: 10,
-          y: 50 
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          rotateY: 0,
-          rotateX: 0,
-          y: 0,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: bioImage,
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      )
-    }
-
-    // Bio Paragraphs Animation
-    const bioParagraphs = section.querySelectorAll('.bio-paragraph')
-    bioParagraphs.forEach((paragraph, index) => {
-      gsap.fromTo(paragraph,
-        { 
-          opacity: 0, 
-          y: 30, 
-          x: 20 
-        },
-        {
-          opacity: 1,
-          y: 0,
-          x: 0,
-          duration: 0.8,
-          delay: index * 0.2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: paragraph,
-            start: "top 90%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      )
-    })
-
-    // Parallax für Profilbild
     let parallaxAnimationId: number | null = null
     const parallaxIntensityImage = 10
     const liftAmountImage = 10
 
     const handleMouseMove = (e: Event) => {
       const mouseEvent = e as MouseEvent;
-      if (!section.classList.contains('is-visible')) return
+      if (!section.classList.contains('is-visible')) return // Nur wenn Sektion sichtbar
       
-      if (parallaxAnimationId) return
+      if (parallaxAnimationId) return // Verhindert Überlastung
       parallaxAnimationId = requestAnimationFrame(() => {
         const rect = bioImageWrapper.getBoundingClientRect()
         const mouseXpercent = ((mouseEvent.clientX - rect.left - rect.width / 2) / (rect.width / 2))
         const mouseYpercent = ((mouseEvent.clientY - rect.top - rect.height / 2) / (rect.height / 2))
         const rotateY = mouseXpercent * parallaxIntensityImage
         const rotateX = -mouseYpercent * parallaxIntensityImage * 0.6
-        bioImageWrapper.style.transition = 'transform 0.05s linear'
+        bioImageWrapper.style.transition = 'transform 0.05s linear' // Schnellere Reaktion bei Mausbewegung
         bioImageWrapper.style.transform = `rotateX(${rotateX - 8}deg) rotateY(${rotateY}deg) translateZ(${liftAmountImage}px)`
         parallaxAnimationId = null
       })
@@ -186,37 +73,42 @@ export default function BiographySection() {
         cancelAnimationFrame(parallaxAnimationId)
         parallaxAnimationId = null
       }
-      bioImageWrapper.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-      bioImageWrapper.style.transform = 'rotateX(-8deg) rotateY(0deg) translateZ(0px)'
+      bioImageWrapper.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' // Sanftes Zurücksetzen
+      bioImageWrapper.style.transform = 'rotateX(-8deg) rotateY(0deg) translateZ(0px)' // Grundrotation beibehalten
     }
 
-    // Mouse Parallax nur auf dem Bild selbst
     if (bioImageWrapper) {
       bioImageWrapper.addEventListener('mousemove', handleMouseMove)
       bioImageWrapper.addEventListener('mouseleave', handleMouseLeave)
     }
+    
+    // Partikel nur initialisieren, wenn der Container da ist
+    if (particleContainerRef.current) {
+        initUeberMichParticles(particleContainerRef.current);
+    }
+
 
     // Cleanup
     return () => {
       observer.disconnect()
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      // ScrollTrigger Kills werden global in gsap-animations.js gehandhabt
       if (bioImageWrapper) {
         bioImageWrapper.removeEventListener('mousemove', handleMouseMove)
         bioImageWrapper.removeEventListener('mouseleave', handleMouseLeave)
       }
+      if (parallaxAnimationId) {
+        cancelAnimationFrame(parallaxAnimationId);
+      }
     }
     
-    // Partikel-Funktion
-    const initUeberMichParticles = (container: HTMLDivElement) => {
-      createGenericParticles(container, 20, 'particle')
-    }
-  }, [])
+  }, []) // Keine Dependencies, da GSAP-Animationen jetzt global sind
 
   const createGenericParticles = (
     container: HTMLDivElement, 
     count: number, 
     particleClass: string
   ) => {
+    if (!container) return; // Sicherheitscheck
     const fragment = document.createDocumentFragment()
     const defaults = { 
       minDuration: 4, 
@@ -229,9 +121,10 @@ export default function BiographySection() {
     
     for (let i = 0; i < count; i++) {
       const particle = document.createElement('div')
-      particle.classList.add(particleClass)
+      particle.classList.add(particleClass) // Verwendet .particle aus globals.css
       const size = defaults.minSize + Math.random() * (defaults.maxSize - defaults.minSize)
       
+      // CSS-Props, die nicht von der globalen .particle-Klasse abgedeckt werden
       let cssProps = `
         width: ${size}px; 
         height: ${size}px; 
@@ -241,41 +134,34 @@ export default function BiographySection() {
         animation-delay: ${defaults.minDelay + Math.random() * (defaults.maxDelay - defaults.minDelay)}s; 
         will-change: transform, opacity;
       `
-      
-      if (particleClass === 'particle') { 
-        cssProps += `
-          background: rgba(64, 224, 208, ${0.4 + Math.random() * 0.4}); 
-          box-shadow: 0 0 ${Math.random() * 8 + 2}px rgba(64, 224, 208, ${0.3 + Math.random() * 0.3});
-        `
-      }
+      // Spezifische .particle Styles aus globals.css werden automatisch angewendet
+      // Keine Notwendigkeit, background oder box-shadow hier manuell zu setzen, wenn .particle global definiert ist
       
       particle.style.cssText = cssProps
       fragment.appendChild(particle)
     }
     
-    container.innerHTML = ''
+    container.innerHTML = '' // Alte Partikel entfernen
     container.appendChild(fragment)
   }
+  
+  const initUeberMichParticles = (container: HTMLDivElement) => {
+    createGenericParticles(container, 30, 'particle') // Anzahl ggf. anpassen
+  }
+
 
   return (
     <section 
       ref={sectionRef}
       id="about-me" 
       className="page-section"
-      style={{
-        background: 'linear-gradient(to bottom, #0f1419 0%, #1a2832 100%)',
-        position: 'relative'
-      }}
+      // style={{ background: 'linear-gradient(to bottom, #0f1419 0%, #1a2832 100%)' }} // Entfernt
+      style={{ position: 'relative' }} // Nur notwendige Styles beibehalten
     >
-      <div 
-        ref={particleContainerRef}
-        className="particle-container"
-      />
-      
       <div className="section-header">
         <h2 className="section-title">
           <span className="title-line">About</span>
-          <span className="title-line">me</span>
+          <span className="title-line">Me</span> {/* 'me' kleingeschrieben war im Original so */}
         </h2>
         <div className="title-underline"></div>
       </div>
@@ -285,71 +171,41 @@ export default function BiographySection() {
           ref={bioImageWrapperRef}
           className="bio-image-wrapper"
           style={{ 
-            perspective: '800px',
-            position: 'relative',
-            width: '100%',
-            maxWidth: '320px',
-            margin: '0 auto',
-            willChange: 'transform'
+            // perspective und willChange sind in globals.css unter .bio-image-wrapper definiert
+            // Redundante Styles hier entfernt, falls sie global sind
+            transform: 'rotateX(-8deg) rotateY(0deg) translateZ(0px)' // Initiale leichte 3D-Rotation
           }}
         >
           <div 
-            className="bio-image"
-            style={{
-              position: 'relative',
-              borderRadius: '10px',
-              overflow: 'hidden',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.08)',
-              opacity: 0,
-              transform: 'translateY(50px) rotateX(10deg) scale(0.95)',
-              willChange: 'transform, opacity'
-            }}
+            className="bio-image" // opacity und transform werden von GSAP in gsap-animations.js gesteuert
           >
             <Image
               src="/assets/images/Profilbild1.jpg"
               alt="Foto von DJ ARADO"
               width={320}
-              height={400}
-              className="bio-image-img"
-              priority
-              style={{ 
-                width: '100%', 
-                height: 'auto', 
-                display: 'block',
-                transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                willChange: 'transform'
-              }}
+              height={400} // Höhe anpassen, um das Bild nicht zu verzerren (Original war 400)
+              className="bio-image-img" // Stile dafür in globals.css
+              priority // Wichtig für LCP
             />
             <div 
-              className="image-overlay"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(135deg, rgba(64, 224, 208, 0.05) 0%, transparent 35%, transparent 65%, rgba(255, 71, 87, 0.05) 100%)',
-                opacity: 0.5,
-                transition: 'opacity 0.4s ease',
-                willChange: 'opacity'
-              }}
+              className="image-overlay" // Stile dafür in globals.css
             ></div>
           </div>
         </div>
         
         <div className="bio-text">
-          <p className="bio-paragraph">
-            From Desolat and Remote Area to Moon Harbour via Düsseldorf – in short, that&apos;s how Arado&apos;s story is best summed up. With the spotlight getting brighter for this talented German export, he&apos;s already accrued a world-wide scroll of premium parties at Cocoon and Watergate Germany, Tenax in Italy, Café D&apos;Anvers in Belgium, WMC in Miami, and a legendary closing finale last season at Space in Ibiza.
-          </p>
-          <p className="bio-paragraph">
-            Arado is genuine proof that almost everything is possible with the right amount of dedication and perseverance. As an undeniably talented producer - his &quot;Uganda Express&quot; release, signed by Loco Dice for his Desolat label, kick-started his career to international status.
-          </p>
-          <p className="bio-paragraph">
-            Following this acclaimed release came other outstanding productions on labels such as All Inn and Dame Music, which ultimately led to an EP on Matthias Tanzmann&apos;s Moon Harbour label that even took him aboard their booking squad.
-          </p>
-          <p className="bio-paragraph">
+          <EnhancedTextReveal className="bio-paragraph" direction="up" stagger={0.02} duration={1}>
+            From Desolat and Remote Area to Moon Harbour via Düsseldorf – in short, that's how Arado's story is best summed up. With the spotlight getting brighter for this talented German export, he's already accrued a world-wide scroll of premium parties at Cocoon and Watergate Germany, Tenax in Italy, Café D'Anvers in Belgium, WMC in Miami, and a legendary closing finale last season at Space in Ibiza.
+          </EnhancedTextReveal>
+          <EnhancedTextReveal className="bio-paragraph" direction="up" stagger={0.02} duration={1} delay={0.2}>
+            Arado is genuine proof that almost everything is possible with the right amount of dedication and perseverance. As an undeniably talented producer - his "Uganda Express" release, signed by Loco Dice for his Desolat label, kick-started his career to international status.
+          </EnhancedTextReveal>
+          <EnhancedTextReveal className="bio-paragraph" direction="up" stagger={0.02} duration={1} delay={0.4}>
+            Following this acclaimed release came other outstanding productions on labels such as All Inn and Dame Music, which ultimately led to an EP on Matthias Tanzmann's Moon Harbour label that even took him aboard their booking squad.
+          </EnhancedTextReveal>
+          <EnhancedTextReveal className="bio-paragraph" direction="up" stagger={0.02} duration={1} delay={0.6}>
             Whether in the beginning in partnership with Den Ishu or nowadays in collaboration with Italian Marco Faraone, Arada simply knows a thing or two about rocking the Deep & Tech House Floors worldwide. His raw, driving grooves with a Chicago edge enjoy the support of the international DJ elite, and are responsible for propelling him to the top of the rankings as an electronic music artist.
-          </p>
+          </EnhancedTextReveal>
         </div>
       </div>
     </section>

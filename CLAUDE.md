@@ -1,0 +1,1 @@
+- Überschriftn sind da. Die namen der labes und clubs die mit der animation kommen sind noch zu klein. mach die zahlen der stats etwas kleiner und die labels und clubs etwas größer, so das sie zueinander passen!

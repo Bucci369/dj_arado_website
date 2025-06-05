@@ -13,78 +13,107 @@ export default function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null)
 
   const stats = [
-    {
-      number: 25,
-      label: "Years in Business",
-      startValue: 10
-    },
-    {
-      number: 192,
-      label: "Clubs Played",
-      startValue: 0
-    },
-    {
-      number: 12,
-      label: "Awards",
-      startValue: 0
-    },
-    {
-      number: 492,
-      label: "Releases",
-      startValue: 0
-    }
+    { number: 25, label: "Years in Business", startValue: 10 },
+    { number: 192, label: "Clubs Played", startValue: 0 },
+    { number: 12, label: "Awards", startValue: 0 },
+    { number: 492, label: "Releases", startValue: 0 }
   ]
 
   const spotifyStats = {
-    number: 34822,
+    number: 34822, // Beispielwert, kann dynamisch sein
     label: "Spotify Plays",
     startValue: 0
   }
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-
     const section = sectionRef.current
     if (!section) return
 
-    // Number formatting function
-    const formatNumberDE = (value: number) => {
-      return Math.round(value).toLocaleString('de-DE')
+    // Title Animation
+    const titleLines = section.querySelectorAll('.title-line')
+    titleLines.forEach((line, index) => {
+      gsap.fromTo(line,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: index * 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: line,
+            start: "top 85%",
+            once: true
+          }
+        }
+      )
+    })
+
+    // Underline Animation
+    const underline = section.querySelector('.title-underline')
+    if (underline) {
+      gsap.fromTo(underline,
+        { scaleX: 0, opacity: 0 },
+        {
+          scaleX: 1,
+          opacity: 1,
+          duration: 0.6,
+          delay: 0.3,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: underline,
+            start: "top 85%",
+            once: true
+          }
+        }
+      )
     }
 
-    // Animate stats numbers
-    const statsItemsForNumberAnimation = section.querySelectorAll('.stat-item')
-    if (statsItemsForNumberAnimation.length > 0) {
-      statsItemsForNumberAnimation.forEach(item => {
-        const statNumberElement = item.querySelector('.stat-number') as HTMLElement
-        if (statNumberElement) {
-          const targetValue = parseFloat(statNumberElement.dataset.targetValue || '0')
-          let startValue = parseFloat(statNumberElement.dataset.startValue || '0')
-          if (isNaN(targetValue)) return
-          if (isNaN(startValue)) { startValue = 0 }
-
-          statNumberElement.textContent = formatNumberDE(startValue)
-          const animatedValue = { val: startValue }
-
-          gsap.to(animatedValue, {
-            val: targetValue,
-            duration: 2.5,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: statNumberElement,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
-            onUpdate: () => { 
-              statNumberElement.textContent = formatNumberDE(animatedValue.val)
-            },
-            onComplete: () => { 
-              statNumberElement.textContent = formatNumberDE(targetValue)
-            }
-          })
+    // Stats Number Animation
+    const statNumbers = section.querySelectorAll('.stat-number')
+    
+    statNumbers.forEach((stat, index) => {
+      const endValue = parseInt(stat.getAttribute('data-target-value') || '0')
+      const startValue = parseInt(stat.getAttribute('data-start-value') || '0')
+      
+      // Set initial display value
+      stat.textContent = startValue.toLocaleString('de-DE')
+      
+      // Number counting animation
+      const countObj = { value: startValue }
+      gsap.to(countObj, {
+        value: endValue,
+        duration: 2.5,
+        delay: index * 0.3,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: stat,
+          start: "top 80%",
+          once: true
+        },
+        onUpdate: function() {
+          stat.textContent = Math.round(countObj.value).toLocaleString('de-DE')
         }
       })
-    }
+    })
+
+    // Stat Items Stagger Animation
+    const statItems = section.querySelectorAll('.stat-item')
+    gsap.fromTo(statItems,
+      { opacity: 0, scale: 0.8 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 70%",
+          once: true
+        }
+      }
+    )
 
     // Cleanup
     return () => {
@@ -95,54 +124,202 @@ export default function StatsSection() {
   return (
     <section 
       ref={sectionRef}
-      id="stats" 
-      className="page-section section-is-white new-style-section min-h-screen py-20 px-8 flex flex-col items-center justify-center text-white"
-      style={{
-        background: 'linear-gradient(to bottom, #3a5668 0%, #1a2832 100%)',
-        position: 'relative'
-      }}
+      id="stats"
+      className="page-section new-style-section"
+      style={{ position: 'relative' }}
     >
       <div className="section-header mb-16">
-        <h2 className="section-title text-4xl md:text-5xl lg:text-6xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
+        <h2 className="section-title text-5xl md:text-6xl lg:text-7xl font-extrabold text-white uppercase tracking-wide text-center mb-4">
           <span className="title-line block">My</span>
           <span className="title-line block">Impact</span>
         </h2>
-        <div className="title-underline w-12 h-1 bg-gradient-to-r from-cyan-400 to-cyan-600 mx-auto"></div>
+        <div className="title-underline"></div>
       </div>
 
-      <div className="stats-container max-w-4xl w-full mx-auto px-4">
-        {/* Stats Grid */}
-        <div className="stats-grid grid grid-cols-2 gap-8 mb-10">
-          {stats.map((stat, index) => (
-            <div key={index} className="stat-item text-center">
-              <span 
-                className="stat-number block text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-2"
-                data-target-value={stat.number}
-                data-start-value={stat.startValue}
+      <div style={{ maxWidth: '1200px', width: '100%', margin: '0 auto', padding: '0 2rem' }}>
+        {/* LINKS UND RECHTS LAYOUT */}
+        <div className="stats-layout">
+          
+          {/* LINKE SPALTE */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+            {/* 25 - Years in Business */}
+            <div style={{ textAlign: 'center' }}>
+              <div 
+                className="stat-number"
+                data-target-value={25}
+                data-start-value={10}
+                style={{ 
+                  fontSize: '2.2rem', 
+                  fontWeight: '700', 
+                  color: '#FFFFFF !important', 
+                  lineHeight: '1',
+                  marginBottom: '0.5rem',
+                  textShadow: 'none',
+                  filter: 'none',
+                  fontFamily: 'Inter, sans-serif'
+                }}
               >
-                {stat.startValue}
-              </span>
-              <hr className="stat-separator w-12 h-0.5 bg-cyan-400 border-none mx-auto my-2" />
-              <span className="stat-label text-sm md:text-base text-cyan-200 uppercase tracking-widest font-medium">
-                {stat.label}
-              </span>
+                25
+              </div>
+              <div style={{ 
+                width: '60px', 
+                height: '2px', 
+                backgroundColor: '#FFFFFF', 
+                margin: '0.5rem auto' 
+              }}></div>
+              <div style={{ 
+                color: '#999999', 
+                fontSize: '0.9rem', 
+                textTransform: 'uppercase', 
+                letterSpacing: '0.1em' 
+              }}>
+                Years in Business
+              </div>
             </div>
-          ))}
+
+            {/* 492 - Releases */}
+            <div style={{ textAlign: 'center' }}>
+              <div 
+                className="stat-number"
+                data-target-value={492}
+                data-start-value={0}
+                style={{ 
+                  fontSize: '2.2rem', 
+                  fontWeight: '700', 
+                  color: '#FFFFFF !important', 
+                  lineHeight: '1',
+                  marginBottom: '0.5rem',
+                  textShadow: 'none',
+                  filter: 'none',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                492
+              </div>
+              <div style={{ 
+                width: '60px', 
+                height: '2px', 
+                backgroundColor: '#FFFFFF', 
+                margin: '0.5rem auto' 
+              }}></div>
+              <div style={{ 
+                color: '#999999', 
+                fontSize: '0.9rem', 
+                textTransform: 'uppercase', 
+                letterSpacing: '0.1em' 
+              }}>
+                Releases
+              </div>
+            </div>
+          </div>
+
+          {/* RECHTE SPALTE */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+            {/* 192 - Clubs Played */}
+            <div style={{ textAlign: 'center' }}>
+              <div 
+                className="stat-number"
+                data-target-value={192}
+                data-start-value={0}
+                style={{ 
+                  fontSize: '2.2rem', 
+                  fontWeight: '700', 
+                  color: '#FFFFFF !important', 
+                  lineHeight: '1',
+                  marginBottom: '0.5rem',
+                  textShadow: 'none',
+                  filter: 'none',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                192
+              </div>
+              <div style={{ 
+                width: '60px', 
+                height: '2px', 
+                backgroundColor: '#FFFFFF', 
+                margin: '0.5rem auto' 
+              }}></div>
+              <div style={{ 
+                color: '#999999', 
+                fontSize: '0.9rem', 
+                textTransform: 'uppercase', 
+                letterSpacing: '0.1em' 
+              }}>
+                Clubs Played
+              </div>
+            </div>
+
+            {/* 12 - Awards */}
+            <div style={{ textAlign: 'center' }}>
+              <div 
+                className="stat-number"
+                data-target-value={12}
+                data-start-value={0}
+                style={{ 
+                  fontSize: '2.2rem', 
+                  fontWeight: '700', 
+                  color: '#FFFFFF !important', 
+                  lineHeight: '1',
+                  marginBottom: '0.5rem',
+                  textShadow: 'none',
+                  filter: 'none',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                12
+              </div>
+              <div style={{ 
+                width: '60px', 
+                height: '2px', 
+                backgroundColor: '#FFFFFF', 
+                margin: '0.5rem auto' 
+              }}></div>
+              <div style={{ 
+                color: '#999999', 
+                fontSize: '0.9rem', 
+                textTransform: 'uppercase', 
+                letterSpacing: '0.1em' 
+              }}>
+                Awards
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Spotify Stats - Larger, centered */}
-        <div className="spotify-item stat-item text-center">
-          <span 
-            className="stat-number spotify-plays block text-6xl md:text-7xl lg:text-8xl font-extrabold text-white leading-tight mb-4"
-            data-target-value={spotifyStats.number}
-            data-start-value={spotifyStats.startValue}
+        {/* SPOTIFY PLAYS - GROß UNTEN */}
+        <div style={{ textAlign: 'center', width: '100%' }}>
+          <div 
+            className="stat-number spotify-plays"
+            data-target-value={34822}
+            data-start-value={0}
+            style={{ 
+              fontSize: '3.5rem', 
+              fontWeight: '700', 
+              color: '#FFFFFF !important', 
+              lineHeight: '1',
+              marginBottom: '1rem',
+              textShadow: 'none',
+              filter: 'none',
+              fontFamily: 'Inter, sans-serif'
+            }}
           >
-            {spotifyStats.startValue}
-          </span>
-          <hr className="stat-separator w-16 h-0.5 bg-cyan-400 border-none mx-auto my-3" />
-          <span className="stat-label text-lg md:text-xl text-cyan-200 uppercase tracking-widest font-medium">
-            {spotifyStats.label}
-          </span>
+            34.822
+          </div>
+          <div style={{ 
+            width: '100px', 
+            height: '3px', 
+            backgroundColor: '#FFFFFF', 
+            margin: '1rem auto' 
+          }}></div>
+          <div style={{ 
+            color: '#999999', 
+            fontSize: '1.2rem', 
+            textTransform: 'uppercase', 
+            letterSpacing: '0.1em' 
+          }}>
+            Spotify Plays
+          </div>
         </div>
       </div>
     </section>
